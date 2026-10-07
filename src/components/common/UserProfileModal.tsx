@@ -259,7 +259,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
             <div style={{ display: 'flex', gap: '0.35rem' }}>
               {(['english', 'hindi', 'regional'] as Language[]).map((lang) => {
                 const active = language === lang;
-                const label = lang === 'english' ? 'English' : lang === 'hindi' ? 'हिंदी' : 'Regional';
+                const label = lang === 'english' ? 'English' : lang === 'hindi' ? 'हिंदी' : 'ਪੰਜਾਬੀ';
                 return (
                   <button
                     key={lang}

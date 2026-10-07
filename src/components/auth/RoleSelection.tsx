@@ -30,12 +30,12 @@ const rolesData: RoleData[] = [
     id: 'farmer',
     nameEn: 'Farmer',
     nameHi: 'किसान',
-    nameReg: 'किसान (खेड़ूत)',
+    nameReg: 'ਕਿਸਾਨ (ਜ਼ਿਮੀਂਦਾਰ)',
     badgeEn: '🌾 Core User',
     badgeHi: '🌾 मुख्य उपयोगकर्ता',
     descriptionEn: 'Access soil testing, crop health scanning, veterinary visits & farm transport booking.',
     descriptionHi: 'मृदा परीक्षण, फसल रोग स्कैनिंग, पशु चिकित्सा और कृषि परिवहन सेवाओं का सीधा लाभ उठाएं।',
-    descriptionReg: 'माटी जांच, फसल रोग जांच, पशु डॉक्टर और गाड़ी बुकिंग री सुविधा उठाओ।',
+    descriptionReg: 'ਮਿੱਟੀ ਪਰਖ, ਫ਼ਸਲ ਰੋਗ ਸਕੈਨਿੰਗ, ਪਸ਼ੂ ਚਿਕਿਤਸਾ ਅਤੇ ਖੇਤੀ ਢੋਆ-ਢੁਆਈ ਬੁਕਿੰਗ ਦੀ ਸਿੱਧੀ ਸਹੂਲਤ ਲਵੋ।',
     icon: Tractor,
     gradient: 'linear-gradient(135deg, #15803d 0%, #22c55e 100%)',
     color: '#16a34a',
@@ -47,12 +47,12 @@ const rolesData: RoleData[] = [
     id: 'vet',
     nameEn: 'Veterinarian',
     nameHi: 'पशु चिकित्सक',
-    nameReg: 'पशु डॉक्टर',
+    nameReg: 'ਪਸ਼ੂ ਡਾਕਟਰ',
     badgeEn: '🩺 Healthcare',
     badgeHi: '🩺 पशु स्वास्थ्य',
     descriptionEn: 'Provide livestock healthcare, diagnosis, vaccinations & schedule on-farm home visits.',
     descriptionHi: 'गाँव के पशुपालकों के मवेशियों की जांच, टीकाकरण और मौके पर जाकर चिकित्सा सेवाएं दें।',
-    descriptionReg: 'पशुवां री बीमारी री जांच, टीका अर मौके पर जा’र इलाज री सेवा देवो।',
+    descriptionReg: 'ਪਸ਼ੂਆਂ ਦੀ ਬਿਮਾਰੀ ਦੀ ਜਾਂਚ, ਟੀਕਾਕਰਨ ਅਤੇ ਮੌਕੇ ਤੇ ਜਾ ਕੇ ਇਲਾਜ ਦੀਆਂ ਸੇਵਾਵਾਂ ਦਿਓ।',
     icon: Stethoscope,
     gradient: 'linear-gradient(135deg, #6d28d9 0%, #a855f7 100%)',
     color: '#7c3aed',
@@ -64,12 +64,12 @@ const rolesData: RoleData[] = [
     id: 'lab',
     nameEn: 'Lab Technician',
     nameHi: 'प्रयोगशाला तकनीशियन',
-    nameReg: 'जांच तकनीशियन',
+    nameReg: 'ਲੈਬ ਟੈਕਨੀਸ਼ੀਅਨ',
     badgeEn: '🔬 Testing & Reports',
     badgeHi: '🔬 मृदा व फसल जांच',
     descriptionEn: 'Process soil & crop samples, generate digital nutrient health cards and expert reports.',
     descriptionHi: 'मिट्टी और फसल के नमूनों का वैज्ञानिक विश्लेषण करें और डिजिटल सॉइल हेल्थ कार्ड बनाएं।',
-    descriptionReg: 'माटी अर फसल नमूनों री जांच करो अर डिजिटल हेल्थ कार्ड जारी करो।',
+    descriptionReg: 'ਮਿੱਟੀ ਅਤੇ ਫ਼ਸਲ ਨਮੂਨਿਆਂ ਦੀ ਜਾਂਚ ਕਰੋ ਅਤੇ ਡਿਜੀਟਲ ਹੈਲਥ ਕਾਰਡ ਜਾਰੀ ਕਰੋ।',
     icon: FlaskConical,
     gradient: 'linear-gradient(135deg, #047857 0%, #10b981 100%)',
     color: '#059669',
@@ -81,12 +81,12 @@ const rolesData: RoleData[] = [
     id: 'driver',
     nameEn: 'Transport Driver',
     nameHi: 'कृषि वाहन चालक',
-    nameReg: 'गाड़ी चालक',
+    nameReg: 'ਗੱਡੀ ਡਰਾਈਵਰ',
     badgeEn: '🚛 Logistics',
     badgeHi: '🚛 कृषि परिवहन',
     descriptionEn: 'Accept transport trips for crops, livestock, fertilizer and agricultural machinery delivery.',
     descriptionHi: 'फसल, अनाज मंडी ढुलाई, मवेशी और कृषि उपकरणों के परिवहन ऑर्डर्स स्वीकार करें।',
-    descriptionReg: 'मंडी में फसल ले जावा, पशु अर खेती साजो-सामान री ढुलाई रो काम करो।',
+    descriptionReg: 'ਮੰਡੀ ਵਿੱਚ ਫ਼ਸਲ ਲਿਜਾਣ, ਪਸ਼ੂ ਅਤੇ ਖੇਤੀਬਾੜੀ ਸਾਜ਼ੋ-ਸਾਮਾਨ ਦੀ ਢੋਆ-ਢੁਆਈ ਕਰੋ।',
     icon: Truck,
     gradient: 'linear-gradient(135deg, #c2410c 0%, #f97316 100%)',
     color: '#ea580c',
@@ -98,12 +98,12 @@ const rolesData: RoleData[] = [
     id: 'ngo',
     nameEn: 'NGO Worker',
     nameHi: 'एनजीओ कार्यकर्ता',
-    nameReg: 'समाज सेवक',
+    nameReg: 'ਸਮਾਜ ਸੇਵਕ',
     badgeEn: '🤝 Community Welfare',
     badgeHi: '🤝 किसान सहायता',
     descriptionEn: 'Support underprivileged farmers, manage relief schemes, field workers and crisis response.',
     descriptionHi: 'किसानों तक सरकारी व सामाजिक कल्याण योजनाएं, सहायता और आपातकालीन राहत पहुंचाएं।',
-    descriptionReg: 'किसानां ताईं सरकारी योजनावां, मदद अर आपदा में तुरंत राहत पहुंचाओ।',
+    descriptionReg: 'ਕਿਸਾਨਾਂ ਤੱਕ ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ, ਸਹਾਇਤਾ ਅਤੇ ਆਫ਼ਤ ਵੇਲੇ ਤੁਰੰਤ ਰਾਹਤ ਪਹੁੰਚਾਓ।',
     icon: Heart,
     gradient: 'linear-gradient(135deg, #be185d 0%, #ec4899 100%)',
     color: '#db2777',
@@ -136,19 +136,19 @@ const RoleSelection: React.FC = () => {
   const headingText = isHindi
     ? 'अपनी भूमिका का चयन करें'
     : isRegional
-      ? 'आपणो काम चुणो'
+      ? 'ਆਪਣੀ ਭੂਮਿਕਾ ਚੁਣੋ'
       : 'Select Your Role';
 
   const subtitleText = isHindi
     ? 'चुनें कि आप NextGen किसान पोर्टल पर किस रूप में जुड़ना चाहते हैं'
     : isRegional
-      ? 'NextGen किसान पोर्टल माथे आप कस्या रूप में जुड़ना चाहो हो'
-      : 'Choose how you want to use the NextGen किसान platform';
+      ? 'ਚੁਣੋ ਕਿ ਤੁਸੀਂ NextGen ਕਿਸਾਨ ਪੋਰਟਲ ਨਾਲ ਕਿਸ ਰੂਪ ਵਿੱਚ ਜੁੜਨਾ ਚਾਹੁੰਦੇ ਹੋ'
+      : 'Choose how you want to use the NextGen ਕਿਸਾਨ platform';
 
   const backText = isHindi
     ? '← लॉगिन पर वापस जाएं'
     : isRegional
-      ? '← पाछा लॉगिन पर जाओ'
+      ? '← ਵਾਪਸ ਲੌਗਇਨ ਤੇ ਜਾਓ'
       : '← Back to login';
 
   return (
