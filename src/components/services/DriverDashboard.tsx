@@ -1,4 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  Truck, Clock, Phone, Eye, Navigation,
+  CheckCircle, Bell, User,
+  ArrowRight, Fuel, IndianRupee, Route
+} from 'lucide-react';
+
+interface TransportRequest {
+  id: string;
+  farmerName: string;
+  pickupLocation: string;
+  destination: string;
+  transportType: string;
+  loadDescription: string;
+  requestDate: string;
+  pickupDate: string;
+  status: string;
+  phone: string;
+  distance: string;
+  rate: string;
+  urgent?: boolean;
+  pickupTime?: string;
+  estimatedDelivery?: string;
+  deliveryTime?: string;
+  completionDate?: string;
+}
 
 // ============================================================================
 // NOTE: DriverDashboard page content is temporarily commented out as requested.
@@ -536,8 +562,8 @@ export default DriverDashboard;
 // import React, { useState } from 'react';
 // import { useAuth } from '../../contexts/AuthContext';
 // import {
-//   Truck, Clock, MapPin, Phone, Eye, Navigation,
-//   TrendingUp, Star, CheckCircle, Bell, User,
+//   Truck, Clock, Phone, Eye, Navigation,
+//   CheckCircle, Bell, User,
 //   ArrowRight, Fuel, IndianRupee, Route
 // } from 'lucide-react';
 //

@@ -128,7 +128,7 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
                   <div className="space-y-4">
                     <div className="relative">
                       <img
-                        src={selectedImage}
+                        src={selectedImage ?? undefined}
                         alt="Uploaded crop"
                         className="w-full h-64 object-cover rounded-lg"
                       />
@@ -209,7 +209,7 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <img
-                    src={selectedImage}
+                    src={selectedImage ?? undefined}
                     alt="Analyzed crop"
                     className="w-full h-48 object-cover rounded-lg"
                   />

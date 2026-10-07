@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
-  Sparkles, Send, X, Bot, User, Mic, MicOff, RefreshCw,
-  Volume2, VolumeX, CheckCircle, Sprout, Square
+  Sparkles, Send, X, Bot, User, Mic, MicOff,
+  Volume2, VolumeX, Sprout, Square
 } from 'lucide-react';
 import {
   speakWithBrowser, stopBrowserSpeech, speakWithElevenLabs,
@@ -51,13 +51,8 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
       const welcomeText = isHindi
         ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 मैं हूँ 'भूमि AI' (Bhoomi AI) — आपकी निजी डिजिटल कृषि सलाहकार।\n\nआप माइक (🎙️) दबाकर बोल सकते हैं या लिखकर पूछ सकते हैं। मैं आपको बोलकर भी जवाब दूंगी!`
         : isRegional
-<<<<<<< HEAD
           ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 म्हूं 'भूमि AI' हूँ — थारी आवाज सूं चालण वाली डिजिटल खेती सलाहकार। माइक (🎙️) दबाय’र बोल सको हो, म्हूं बोल’र भी जवाब देसूं!`
           : `Namaste ${user?.name || 'Kisan'}! 🙏 I am 'Bhoomi AI' — your voice-enabled digital farming advisor.\n\nYou can click the Mic (🎙️) to speak your query, or type below. I will also read out my answers to you!`;
-=======
-          ? `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ${user?.name || 'ਕਿਸਾਨ ਵੀਰ'}! 🙏 ਮੈਂ ਹਾਂ 'ਭੂਮੀ AI' (Bhoomi AI) — ਤੁਹਾਡੀ 24x7 ਨਿੱਜੀ ਡਿਜੀਟਲ ਖੇਤੀਬਾੜੀ ਸਲਾਹਕਾਰ। ਤੁਸੀਂ ਮੈਨੂੰ ਫ਼ਸਲਾਂ ਦੇ ਰੋਗ, ਖਾਦਾਂ, ਮਿੱਟੀ ਪਰਖ, ਪਸ਼ੂਆਂ ਦੀ ਸਿਹਤ ਜਾਂ ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਬਾਰੇ ਕੁਝ ਵੀ ਪੁੱਛ ਸਕਦੇ ਹੋ!`
-          : `Namaste ${user?.name || 'Kisan'}! 🙏 I am 'Bhoomi AI' — your 24/7 personal digital farming and crop advisor. Ask me anything about crop diseases, NPK fertilizers, soil testing, livestock health, or government schemes!`;
->>>>>>> 266904e8765727ae1788b33f0d6f8694c9011bc5
 
       setMessages([
         {
@@ -331,129 +326,6 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           '🐛 How to make organic neem pesticide?',
         ];
 
-<<<<<<< HEAD
-=======
-  // AI response engine with agricultural knowledge
-  const generateAIResponse = (query: string): string => {
-    const q = query.toLowerCase();
-
-    // 1. Wheat / गेहूं / Leaf yellowing
-    if (q.includes('wheat') || q.includes('गेहूं') || q.includes('ਕਣਕ') || q.includes('पील') || q.includes('yellow') || q.includes('पत्ता') || q.includes('ਪੱਤੇ')) {
-      return isHindi
-        ? '🌾 **गेहूं में पीलापन का समाधान:**\n1. यदि निचले पत्ते पीले हैं, तो यह **नाइट्रोजन की कमी** है — 2% यूरिया (100 लीटर पानी में 2 किग्रा यूरिया) का छिड़काव करें।\n2. यदि पत्तों पर पीला पाउडर/धब्बे हैं, तो यह **पीला रतुआ (Yellow Rust)** है — प्रोपिकोनाजोल (Tilt 25 EC) 1 मिली प्रति लीटर पानी में मिलाकर तुरंत छिड़कें।\n3. ध्यान रखें: खेत में पानी भरने न दें।'
-        : isRegional
-          ? '🌾 **ਕਣਕ ਵਿੱਚ ਪੀਲਾਪਣ ਦੂਰ ਕਰਨ ਦੇ ਨੁਕਤੇ:**\n1. ਜੇਕਰ ਹੇਠਲੇ ਪੱਤੇ ਪੀਲੇ ਹਨ, ਤਾਂ ਇਹ **ਨਾਈਟ੍ਰੋਜਨ ਦੀ ਘਾਟ** ਹੈ — 2% ਯੂਰੀਆ ਦਾ ਛਿੜਕਾਅ ਕਰੋ।\n2. ਜੇਕਰ ਪੀਲੀ ਕੁੰਗੀ (Yellow Rust) ਦੇ ਲੱਛਣ ਹਨ, ਤਾਂ ਪ੍ਰੋਪੀਕੋਨਾਜ਼ੋਲ (Tilt 25 EC) 1 ਮਿ.ਲੀ. ਪ੍ਰਤੀ ਲੀਟਰ ਪਾਣੀ ਵਿੱਚ ਮਿਲਾ ਕੇ ਛਿੜਕੋ।\n3. ਖੇਤ ਵਿੱਚ ਵਾਧੂ ਪਾਣੀ ਖੜ੍ਹਾ ਨਾ ਹੋਣ ਦਿਓ।'
-          : '🌾 **Wheat Leaf Yellowing Solution:**\n1. **Nitrogen Deficiency**: If lower leaves turn pale yellow, spray 2% Urea solution (2 kg urea per 100L water).\n2. **Yellow Rust (Fungal)**: If yellowish powder or streaks appear, apply Propiconazole (Tilt 25 EC) @ 1 ml/liter of water immediately.\n3. Avoid water stagnation in the field.';
-    }
-
-    // 2. Soil test / मिट्टी / माटी
-    if (q.includes('soil') || q.includes('मिट्टी') || q.includes('ਮਿੱਟੀ') || q.includes('माटी') || q.includes('test') || q.includes('जांच') || q.includes('ਪਰਖ')) {
-      return isHindi
-        ? '🧪 **मृदा परीक्षण (Soil Testing):**\nNextGen किसान पोर्टल पर मिट्टी की जांच बहुत आसान है!\n1. होम स्क्रीन पर **"Soil & Crop Test"** कार्ड पर क्लिक करें।\n2. अपने खेत का 5 अलग-अलग स्थानों से V-आकार में 6-8 इंच गहरा नमूना लें।\n3. लैब तकनीशियन आपके घर आकर सैंपल कलेक्ट करेंगे और 2-3 दिन में डिजिटल रिपोर्ट मिल जाएगी।'
-        : isRegional
-          ? '🧪 **ਮਿੱਟੀ ਦੀ ਪਰਖ (Soil Test):**\nNextGen ਕਿਸਾਨ ਪੋਰਟਲ ਤੇ ਮਿੱਟੀ ਦੀ ਜਾਂਚ ਬਹੁਤ ਸੌਖੀ ਹੈ!\n1. ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ **"Soil & Crop Test"** ਤੇ ਕਲਿੱਕ ਕਰੋ।\n2. ਖੇਤ ਵਿੱਚੋਂ 5 ਵੱਖ-ਵੱਖ ਥਾਵਾਂ ਤੋਂ 6-8 ਇੰਚ ਡੂੰਘਾ ਨਮੂਨਾ ਲਵੋ।\n3. ਲੈਬ ਟੈਕਨੀਸ਼ੀਅਨ ਤੁਹਾਡੇ ਘਰੋਂ ਸੈਂਪਲ ਲੈ ਜਾਵੇਗਾ ਅਤੇ 2-3 ਦਿਨਾਂ ਵਿੱਚ ਡਿਜੀਟਲ ਰਿਪੋਰਟ ਮਿਲ ਜਾਵੇਗੀ।'
-          : '🧪 **Soil Health Testing:**\nBooking a soil test on NextGen Kisan is fast & easy!\n1. Click on **"Soil & Crop Test"** on your dashboard.\n2. Collect soil from 5 spots in a V-shape pattern at 6-8 inch depth.\n3. A certified lab technician will collect the sample and upload your digital nutrient card within 2-3 days.';
-    }
-
-    // 3. PM-Kisan / योजना / subsidy / kcc
-    if (q.includes('pm-kisan') || q.includes('kisan') || q.includes('योजना') || q.includes('ਕਿਸਾਨ') || q.includes('किस्त') || q.includes('subsidy') || q.includes('kcc')) {
-      return isHindi
-        ? '💰 **पीएम-किसान व सरकारी योजनाएं:**\n- **PM-KISAN:** पात्र किसानों को प्रति वर्ष ₹6,000 (3 किस्तों में ₹2,000 प्रत्येक) DBT के जरिए बैंक खाते में मिलते हैं।\n- **e-KYC जरूरी है:** pmkisan.gov.in पर जाकर या नजदीकी ई-मित्र/CSC सेंटर से बायोमेट्रिक e-KYC अवश्य पूरा रखें।\n- **KCC (किसान क्रेडिट कार्ड):** 4% की रियायती ब्याज दर पर ₹3 लाख तक का कृषि ऋण मिलता है।'
-        : isRegional
-          ? '💰 **ਪੀ.ਐਮ-ਕਿਸਾਨ ਅਤੇ ਸਰਕਾਰੀ ਸਕੀਮਾਂ:**\n- **PM-KISAN:** ਯੋਗ ਕਿਸਾਨਾਂ ਨੂੰ ਸਾਲਾਨਾ ₹6,000 (3 ਕਿਸ਼ਤਾਂ ਵਿੱਚ ₹2,000) ਸਿੱਧੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਮਿਲਦੇ ਹਨ। ਆਪਣੀ e-KYC ਪੂਰੀ ਰੱਖੋ।\n- **KCC ਕਾਰਡ:** 4% ਦੀ ਰਿਆਇਤੀ ਵਿਆਜ ਦਰ ਤੇ ₹3 ਲੱਖ ਤੱਕ ਦਾ ਖੇਤੀ ਕਰਜ਼ਾ ਮਿਲਦਾ ਹੈ।'
-          : '💰 **PM-KISAN & Govt Schemes:**\n- **PM-KISAN:** ₹6,000 per year distributed in three 4-monthly installments of ₹2,000 directly via DBT.\n- **Mandatory e-KYC:** Ensure your Aadhaar biometric e-KYC and land records are seeded on pmkisan.gov.in.\n- **KCC Card:** Subsidized crop loan limit up to ₹3 Lakhs at only 4% interest rate.';
-    }
-
-    // 4. Livestock / cow / buffalo / vet / पशु / गाय / भैंस / बुखार
-    if (q.includes('cow') || q.includes('buffalo') || q.includes('गाय') || q.includes('ਭੈਸ') || q.includes('भैंस') || q.includes('पशु') || q.includes('ਪਸ਼ੂ') || q.includes('बुखार') || q.includes('fever') || q.includes('vet')) {
-      return isHindi
-        ? '🐄 **पशु स्वास्थ्य व प्राथमिक देखभाल:**\n1. यदि गाय/भैंस को तेज बुखार है, तो उसे धूप से हटाकर पंखे या हवादार जगह पर रखें और माथे पर गीला कपड़ा रखें।\n2. ताज़ा पानी व दलिया/गुड़ का काढ़ा दें।\n3. 🩺 NextGen किसान पोर्टल के **"Veterinary Services"** विकल्प से तुरंत सरकारी या प्राइवेट डॉक्टर का होम विजिट बुक करें।'
-        : isRegional
-          ? '🐄 **ਪਸ਼ੂਆਂ ਦੀ ਸਾਂਭ-ਸੰਭਾਲ ਤੇ ਇਲਾਜ:**\n1. ਜੇਕਰ ਪਸ਼ੂ ਨੂੰ ਤੇਜ਼ ਬੁਖ਼ਾਰ ਹੈ, ਤਾਂ ਛਾਂ ਵਿੱਚ ਬੰਨ੍ਹੋ ਅਤੇ ਸਿਰ ਤੇ ਠੰਢਾ ਪਾਣੀ ਪਾਓ।\n2. ਤਾਜ਼ਾ ਪਾਣੀ ਤੇ ਦਲੀਆ ਦਿਓ।\n3. 🩺 NextGen ਕਿਸਾਨ ਪੋਰਟਲ ਤੋਂ **"Veterinary Services"** ਰਾਹੀਂ ਪਸ਼ੂ ਡਾਕਟਰ ਨੂੰ ਘਰ ਬੁਲਾਓ।'
-          : '🐄 **Livestock First Aid & Vet Support:**\n1. If your cow or buffalo has fever or lethargy, move them to shaded, well-ventilated shelter and apply a cool wet cloth to the forehead.\n2. Keep fresh drinking water available.\n3. 🩺 Use our **"Veterinary Services"** button on the dashboard to request an on-farm doctor visit right away.';
-    }
-
-    // 5. Pest / Neem / कीटनाशक / कीड़ा / फंगस / fungus
-    if (q.includes('pest') || q.includes('neem') || q.includes('कीट') || q.includes('ਕੀਟ') || q.includes('कीड़ा') || q.includes('कीटनाशक') || q.includes('insect') || q.includes('fungus')) {
-      return isHindi
-        ? '🐛 **जैविक कीटनाशक (Neem Oil):**\n- 1 लीटर पानी में 5 मिली नीम का तेल (Neem Oil 1500 PPM) और 1 मिली शैम्पू/साबुन का घोल मिलाकर सुबह या शाम को छिड़कें।\n- यह माहू, सफेद मक्खी, इल्ली और थ्रिप्स को बिना किसी साइड-इफेक्ट के नष्ट करता है और मित्र कीटों (मधुमक्खी, केंचुए) को नुकसान नहीं पहुँचाता।'
-        : isRegional
-          ? '🐛 **ਜੈਵਿਕ ਨਿੰਮ ਕੀਟਨਾਸ਼ਕ:**\n1 ਲੀਟਰ ਪਾਣੀ ਵਿੱਚ 5 ਮਿ.ਲੀ. ਨਿੰਮ ਦਾ ਤੇਲ (Neem Oil 1500 PPM) ਅਤੇ 1 ਮਿ.ਲੀ. ਸਾਬਣ ਦਾ ਘੋਲ ਮਿਲਾ ਕੇ ਛਿੜਕਾਅ ਕਰੋ। ਇਹ ਫ਼ਸਲ ਨੂੰ ਨੁਕਸਾਨ ਪਹੁੰਚਾਏ ਬਿਨਾਂ ਕੀੜਿਆਂ ਨੂੰ ਰੋਕਦਾ ਹੈ।'
-          : '🐛 **Organic Neem Pest Control:**\n- Mix 5 ml Neem Oil (1500 PPM) with 1 ml liquid soap/mild detergent in 1 liter of water.\n- Spray during early morning or late afternoon. It controls aphids, whiteflies, caterpillars, and thrips without harming beneficial insects or soil microbiome.';
-    }
-
-    // 6. Fertilizer / NPK / यूरिया / DAP
-    if (q.includes('fertilizer') || q.includes('npk') || q.includes('urea') || q.includes('dap') || q.includes('खाद') || q.includes('ਖਾਦ')) {
-      return isHindi
-        ? '🌱 **खाद व पोषण प्रबंधन:**\n- हमेशा मृदा जांच रिपोर्ट के आधार पर ही खाद दें।\n- बुवाई के समय DAP या NPK 12:32:16 दें, और पहली तथा दूसरी सिंचाई के समय यूरिया को दो बराबर हिस्सों में बांटकर (Top Dressing) दें।\n- गोबर की सड़ी खाद (Vermicompost) मिलाने से मिट्टी की जल धारण क्षमता 30% बढ़ती है।'
-        : isRegional
-          ? '🌱 **ਖਾਦ ਪ੍ਰਬੰਧਨ:**\n- ਮਿੱਟੀ ਪਰਖ ਰਿਪੋਰਟ ਦੇ ਆਧਾਰ ਤੇ ਖਾਦ ਪਾਓ।\n- ਬਿਜਾਈ ਵੇਲੇ DAP ਅਤੇ ਪਹਿਲੇ-ਦੂਜੇ ਪਾਣੀ ਨਾਲ ਯੂਰੀਆ ਕਿਸ਼ਤਾਂ ਵਿੱਚ ਪਾਓ।\n- ਰੂੜੀ ਖਾਦ ਜ਼ਰੂਰ ਪਾਓ ਤਾਂ ਜੋ ਜ਼ਮੀਨ ਦੀ ਉਪਜਾਊ ਸ਼ਕਤੀ ਬਣੀ ਰਹੇ।'
-          : '🌱 **Fertilizer & Nutrient Guidance:**\n- Follow a split application: Apply full dose of DAP/Phosphorus & Potash at sowing, and divide Urea into 2 splits applied after 1st and 2nd irrigations.\n- Adding well-rotted FYM or Vermicompost improves soil moisture retention significantly.';
-    }
-
-    // Fallback response
-    return isHindi
-      ? `🙏 आपका सवाल बहुत महत्वपूर्ण है! भूमि AI आपकी मदद के लिए निरंतर सीख रही है। आप NextGen किसान पोर्टल पर सीधे हमारे विशेषज्ञों (सत्यापित पशु चिकित्सक, मृदा लैब तकनीशियन या कृषि विशेषज्ञ) से भी परामर्श ले सकते हैं। क्या आप किसी विशिष्ट फसल (गेहूं, सरसों, चना, कपास) या सेवा के बारे में जानना चाहते हैं?`
-      : isRegional
-        ? `🙏 ਤੁਹਾਡਾ ਸਵਾਲ ਬਹੁਤ ਅਹਿਮ ਹੈ! ਖੇਤੀਬਾੜੀ, ਮਿੱਟੀ ਪਰਖ ਜਾਂ ਪਸ਼ੂਆਂ ਦੇ ਇਲਾਜ ਲਈ ਤੁਸੀਂ NextGen ਕਿਸਾਨ ਪੋਰਟਲ ਦੇ ਮਾਹਰ ਡਾਕਟਰਾਂ ਤੇ ਲੈਬ ਟੈਕਨੀਸ਼ੀਅਨਾਂ ਨਾਲ ਵੀ ਸਿੱਧਾ ਜੁੜ ਸਕਦੇ ਹੋ। ਕੋਈ ਹੋਰ ਜਾਣਕਾਰੀ ਚਾਹੀਦੀ ਹੈ ਤਾਂ ਪੁੱਛੋ!`
-        : `🙏 That's a great question! Bhoomi AI is actively assisting with crop diagnostics, fertilizers, pest control, and government subsidies. You can also connect with certified experts directly via our dashboard services. Would you like advice on a specific crop (Wheat, Mustard, Gram, Cotton) or platform service?`;
-  };
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      sender: 'user',
-      text: inputValue.trim(),
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInputValue('');
-    setIsTyping(true);
-
-    setTimeout(() => {
-      const aiReplyText = generateAIResponse(userMsg.text);
-      const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        sender: 'ai',
-        text: aiReplyText,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, aiMsg]);
-      setIsTyping(false);
-    }, 900);
-  };
-
-  const handleQuickQuestion = (text: string) => {
-    setInputValue(text);
-    setTimeout(() => {
-      const userMsg: Message = {
-        id: Date.now().toString(),
-        sender: 'user',
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, userMsg]);
-      setInputValue('');
-      setIsTyping(true);
-
-      setTimeout(() => {
-        const aiReplyText = generateAIResponse(text);
-        const aiMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          sender: 'ai',
-          text: aiReplyText,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
-        setMessages((prev) => [...prev, aiMsg]);
-        setIsTyping(false);
-      }, 800);
-    }, 50);
-  };
-
->>>>>>> 266904e8765727ae1788b33f0d6f8694c9011bc5
   if (!isOpen) return null;
 
   return (
@@ -554,7 +426,6 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                   {isHindi ? 'महिला आवाज 🎙️' : 'Female Voice 🎙️'}
                 </span>
               </div>
-<<<<<<< HEAD
               <p style={{ margin: 0, fontSize: '0.75rem', color: '#dcfce7', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                 {isListening ? (
                   <span style={{ color: '#fef08a', fontWeight: 700 }}>
@@ -569,11 +440,6 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                     🟢 {isHindi ? 'ऑनलाइन • बोलकर या लिखकर पूछें' : 'Online • Speak or type'}
                   </span>
                 )}
-=======
-              <p style={{ margin: 0, fontSize: '0.75rem', color: '#dcfce7', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#86efac', display: 'inline-block' }} />
-                {isHindi ? 'ऑनलाइन • हिंदी में सहायता के लिए तैयार' : isRegional ? 'ਆਨਲਾਈਨ • ਪੰਜਾਬੀ ਵਿੱਚ ਸਹਾਇਤਾ ਲਈ ਤਿਆਰ' : 'Online • Ready to assist in English'}
->>>>>>> 266904e8765727ae1788b33f0d6f8694c9011bc5
               </p>
             </div>
           </div>
@@ -1014,7 +880,6 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
               if (e.key === 'Enter') handleSend();
             }}
             placeholder={
-<<<<<<< HEAD
               isListening
                 ? (isHindi ? 'बोलिए... भूमि AI सुन रही है 🎙️' : 'Listening... Speak now 🎙️')
                 : isHindi
@@ -1022,13 +887,6 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                   : isRegional
                     ? 'माइक दबाय’र बोलो या अठै लिखो...'
                     : 'Click Mic to speak or type here...'
-=======
-              isHindi
-                ? 'फसल, खाद या योजना का सवाल पूछें...'
-                : isRegional
-                  ? 'ਖੇਤੀਬਾੜੀ, ਫ਼ਸਲ ਜਾਂ ਸਕੀਮ ਬਾਰੇ ਪੁੱਛੋ...'
-                  : 'Ask about crop health, fertilizer, subsidy...'
->>>>>>> 266904e8765727ae1788b33f0d6f8694c9011bc5
             }
             style={{
               flex: 1,

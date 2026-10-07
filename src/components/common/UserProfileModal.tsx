@@ -4,8 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getTranslation, Language } from '../../utils/translations';
 import {
   X, LogOut, Phone, MapPin, ShieldCheck, CheckCircle2,
-  Calendar, Award, Sprout, CreditCard, ChevronRight,
-  Sparkles, FileText, Globe, Bot, MessageSquare
+  Award, Sprout, CreditCard,
+  FileText, Globe, Bot, MessageSquare
 } from 'lucide-react';
 import BhoomiAIChat from '../farmer/BhoomiAIChat';
 

@@ -1,4 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  Heart, Clock, CheckCircle, MapPin, Phone, Eye,
+  Users, IndianRupee, Globe, Bell,
+  User, HandHeart, Award, Star, MessageSquare
+} from 'lucide-react';
+
+interface SupportRequest {
+  id: string;
+  farmerName: string;
+  location: string;
+  supportType: string;
+  issue: string;
+  urgency: string;
+  requestDate: string;
+  status: string;
+  phone: string;
+  estimatedAmount: string;
+  acceptedDate?: string;
+  assignedWorker?: string;
+  completionDate?: string;
+  supportProvided?: string;
+}
 
 // ============================================================================
 // NOTE: NGODashboard page content is temporarily commented out as requested.

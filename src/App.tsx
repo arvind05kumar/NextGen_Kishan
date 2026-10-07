@@ -12,7 +12,7 @@ import DriverDashboard from './components/services/DriverDashboard';
 import NGODashboard from './components/services/NGODashboard';
 
 const AppContent: React.FC = () => {
-  const { user, currentStep } = useAuth();
+  const { currentStep } = useAuth();
 
   const renderCurrentStep = () => {
     switch (currentStep) {

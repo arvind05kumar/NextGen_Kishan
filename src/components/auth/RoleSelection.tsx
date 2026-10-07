@@ -2,10 +2,9 @@ import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   Tractor, FlaskConical, Truck, Heart, Stethoscope,
-  ArrowRight, ArrowLeft, Sparkles, CheckCircle2, Shield
+  ArrowRight, ArrowLeft, Sparkles
 } from 'lucide-react';
 import leavesBg from '../../assets/Leaves-bg.png';
-import logo from '../../assets/nextgen-kisan.png';
 
 interface RoleData {
   id: 'farmer' | 'lab' | 'vet' | 'driver' | 'ngo';

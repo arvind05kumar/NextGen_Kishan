@@ -1,4 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  TestTube2, Clock, CheckCircle, FileText, MapPin, Eye,
+  FlaskConical, Microscope, BarChart3, TrendingUp,
+  Upload, Bell, ArrowRight, User
+} from 'lucide-react';
+
+interface TestRequest {
+  id: string;
+  farmerName: string;
+  farmLocation: string;
+  testType: string;
+  samples: string;
+  requestDate: string;
+  urgency: string;
+  status: string;
+  phone: string;
+  collectionDate?: string;
+  expectedCompletion?: string;
+  completionDate?: string;
+  reportUrl?: string;
+}
 
 // ============================================================================
 // NOTE: LabDashboard page content is temporarily commented out as requested.
@@ -506,7 +528,7 @@ export default LabDashboard;
 // import {
 //   TestTube2, Clock, CheckCircle, FileText, MapPin, Eye,
 //   FlaskConical, Microscope, BarChart3, TrendingUp,
-//   Upload, Bell, ArrowRight, User, Calendar, Award
+//   Upload, Bell, ArrowRight, User
 // } from 'lucide-react';
 //
 // interface TestRequest {
