@@ -39,11 +39,9 @@ const AppContent: React.FC = () => {
     }
   };
 
-  const isBlankRole = ['lab-dashboard', 'driver-dashboard', 'ngo-dashboard'].includes(currentStep);
-
   return (
-    <div className={`min-h-screen ${currentStep === 'login' ? 'bg-[#06180c]' : isBlankRole ? 'bg-white' : 'bg-[#D2F2D4]'}`}>
-      {!isBlankRole && <Navbar />}
+    <div className={`min-h-screen ${currentStep === 'login' ? 'bg-[#06180c]' : 'bg-[#D2F2D4]'}`}>
+      <Navbar />
       {renderCurrentStep()}
     </div>
   );

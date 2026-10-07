@@ -125,11 +125,8 @@ const RoleSelection: React.FC = () => {
 
     if (roleId === 'farmer') {
       setCurrentStep('farmer-verification');
-    } else if (roleId === 'vet') {
-      setCurrentStep('professional-verification');
     } else {
-      // Lab technician, driver, and ngo pages are temporarily disabled/blank
-      setCurrentStep(`${roleId}-dashboard`);
+      setCurrentStep('professional-verification');
     }
   };
 
