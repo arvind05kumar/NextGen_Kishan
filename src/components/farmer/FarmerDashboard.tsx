@@ -3,16 +3,19 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   TestTube2, Stethoscope, Camera, Truck, ArrowRight,
   Leaf, Sun, CloudRain, Wind, TrendingUp, Bell, Star,
-  CheckCircle, Clock, AlertCircle, Sprout, BarChart3, Wheat
+  CheckCircle, Clock, AlertCircle, Sprout, BarChart3, Wheat,
+  Bot, MessageSquare, Sparkles
 } from 'lucide-react';
 import SoilCropTestModal from './modals/SoilCropTestModal';
 import VetServiceModal from './modals/VetServiceModal';
 import CropScanningModal from './modals/CropScanningModal';
 import TransportModal from './modals/TransportModal';
+import BhoomiAIChat from './BhoomiAIChat';
 
 const FarmerDashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user, language } = useAuth();
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [isBhoomiOpen, setIsBhoomiOpen] = useState(false);
 
   const services = [
     {
@@ -423,6 +426,61 @@ const FarmerDashboard: React.FC = () => {
       {activeModal === 'vet-service' && <VetServiceModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'crop-scanning' && <CropScanningModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'transport' && <TransportModal onClose={() => setActiveModal(null)} />}
+
+      {/* Floating Bhoomi AI Assistant Button */}
+      <div style={{ position: 'fixed', bottom: '1.75rem', right: '1.75rem', zIndex: 40 }}>
+        <button
+          id="bhoomi-ai-floating-btn"
+          onClick={() => setIsBhoomiOpen(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.65rem',
+            padding: '0.75rem 1.25rem',
+            borderRadius: '9999px',
+            background: 'linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
+            color: '#ffffff',
+            border: '2px solid rgba(255, 255, 255, 0.4)',
+            boxShadow: '0 8px 24px rgba(22, 163, 74, 0.4), 0 2px 8px rgba(0,0,0,0.1)',
+            cursor: 'pointer',
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            transition: 'all 0.25s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
+            e.currentTarget.style.boxShadow = '0 12px 28px rgba(22, 163, 74, 0.5), 0 4px 12px rgba(0,0,0,0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(22, 163, 74, 0.4), 0 2px 8px rgba(0,0,0,0.1)';
+          }}
+        >
+          <div style={{
+            width: '28px', height: '28px', borderRadius: '50%',
+            backgroundColor: '#ffffff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Bot style={{ width: '18px', height: '18px', color: '#16a34a' }} />
+          </div>
+          <span>Bhoomi AI</span>
+          <span style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            padding: '0.15rem 0.5rem',
+            borderRadius: '9999px'
+          }}>
+            {language === 'hindi' ? 'भूमि AI' : 'Ask AI'}
+          </span>
+        </button>
+      </div>
+
+      {/* Bhoomi AI Chat Modal */}
+      <BhoomiAIChat
+        isOpen={isBhoomiOpen}
+        onClose={() => setIsBhoomiOpen(false)}
+      />
     </div>
   );
 };
