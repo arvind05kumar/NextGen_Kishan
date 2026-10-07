@@ -165,7 +165,7 @@ const LoginPage: React.FC = () => {
             <Sprout className="w-4 h-4 text-white" />
           </div>
           <span className="font-extrabold text-white text-sm sm:text-base tracking-tight">
-            NextGen <span className="text-[#E8A317]">किसान</span>
+            NextGen <span className="text-[#E8A317]">{isHindi ? 'किसान' : isRegional ? 'ਕਿਸਾਨ' : 'Kisan'}</span>
           </span>
         </div>
 
@@ -315,10 +315,10 @@ const LoginPage: React.FC = () => {
               {/* Card Header: Brand Logo & Title */}
               <div className="text-center mb-6">
                 <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden bg-white/95 flex items-center justify-center shadow-lg p-1 border-2 border-emerald-400/60">
-                  <img src={logo} alt="NextGen किसान" className="w-full h-full object-contain" />
+                  <img src={logo} alt={isHindi ? 'NextGen किसान' : isRegional ? 'NextGen ਕਿਸਾਨ' : 'NextGen Kisan'} className="w-full h-full object-contain" />
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-1">
-                  NextGen <span className="text-[#E8A317]">किसान</span>
+                  NextGen <span className="text-[#E8A317]">{isHindi ? 'किसान' : isRegional ? 'ਕਿਸਾਨ' : 'Kisan'}</span>
                 </h2>
                 <p className="text-emerald-100/90 text-xs sm:text-sm font-medium">
                   {isHindi
@@ -570,7 +570,7 @@ const LoginPage: React.FC = () => {
           </span>
         </div>
         <div className="text-white/80 text-[11px] bg-[#093318]/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-          NextGen किसान &copy; {new Date().getFullYear()} • Dedicated to Farmers Across India
+          NextGen {isHindi ? 'किसान' : isRegional ? 'ਕਿਸਾਨ' : 'Kisan'} &copy; {new Date().getFullYear()} • Dedicated to Farmers Across India
         </div>
       </footer>
 

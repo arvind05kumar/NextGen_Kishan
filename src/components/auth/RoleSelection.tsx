@@ -142,7 +142,7 @@ const RoleSelection: React.FC = () => {
     ? 'चुनें कि आप NextGen किसान पोर्टल पर किस रूप में जुड़ना चाहते हैं'
     : isRegional
       ? 'ਚੁਣੋ ਕਿ ਤੁਸੀਂ NextGen ਕਿਸਾਨ ਪੋਰਟਲ ਨਾਲ ਕਿਸ ਰੂਪ ਵਿੱਚ ਜੁੜਨਾ ਚਾਹੁੰਦੇ ਹੋ'
-      : 'Choose how you want to use the NextGen ਕਿਸਾਨ platform';
+      : 'Choose how you want to use the NextGen Kisan platform';
 
   const backText = isHindi
     ? '← लॉगिन पर वापस जाएं'
@@ -165,7 +165,11 @@ const RoleSelection: React.FC = () => {
           <div className="inline-flex items-center justify-center gap-2 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-green-200 shadow-sm mb-3 sm:mb-4">
             <Sparkles className="w-4 h-4 text-green-600" />
             <span className="text-[11px] sm:text-xs font-bold tracking-wider text-green-800 uppercase">
-              NextGen ਕਿਸਾਨ • User Portals
+              {isHindi
+                ? 'NextGen किसान • यूज़र पोर्टल'
+                : isRegional
+                  ? 'NextGen ਕਿਸਾਨ • ਯੂਜ਼ਰ ਪੋਰਟਲ'
+                  : 'NextGen Kisan • User Portals'}
             </span>
           </div>
 
@@ -258,10 +262,12 @@ const RoleSelection: React.FC = () => {
                       >
                         {roleName}
                       </h3>
-                      {/* Secondary English subtitle if viewing Hindi, or Hindi subtitle if viewing English */}
-                      <p className="text-xs font-semibold text-gray-400">
-                        {isHindi ? role.nameEn : role.nameHi}
-                      </p>
+                      {/* Secondary English subtitle if viewing Hindi or Punjabi */}
+                      {(isHindi || isRegional) && (
+                        <p className="text-xs font-semibold text-gray-400">
+                          {role.nameEn}
+                        </p>
+                      )}
                     </div>
 
                     {/* Description */}

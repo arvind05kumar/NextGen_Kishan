@@ -27,10 +27,9 @@ const Navbar: React.FC = () => {
   const visual = roleVisuals[user.role] || { color: '#16a34a', bg: '#f0fdf4', emoji: '👤' };
   const roleLabel = t.roles[user.role as keyof typeof t.roles] || user.role;
 
-  const isEnglish = language === 'english';
   const defaultProfileName = user.role === 'farmer'
-    ? (isEnglish ? 'Farmer Profile' : 'ਕਿਸਾਨ ਪ੍ਰੋਫਾਈਲ')
-    : (isEnglish ? 'User Profile' : 'ਯੂਜ਼ਰ ਪ੍ਰੋਫਾਈਲ');
+    ? (language === 'hindi' ? 'किसान प्रोफाइल' : language === 'regional' ? 'ਕਿਸਾਨ ਪ੍ਰੋਫਾਈਲ' : 'Farmer Profile')
+    : (language === 'hindi' ? 'उपयोगकर्ता प्रोफाइल' : language === 'regional' ? 'ਯੂਜ਼ਰ ਪ੍ਰੋਫਾਈਲ' : 'User Profile');
 
   return (
     <>
@@ -53,7 +52,10 @@ const Navbar: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <div className="font-extrabold text-sm sm:text-base text-gray-900 leading-tight">
-                  NextGen <span style={{ color: visual.color }}>ਕਿਸਾਨ</span>
+                  NextGen{' '}
+                  <span style={{ color: visual.color }}>
+                    {language === 'hindi' ? 'किसान' : language === 'regional' ? 'ਕਿਸਾਨ' : 'Kisan'}
+                  </span>
                 </div>
                 <div className="hidden sm:block text-[10px] text-gray-400 tracking-wider font-semibold">
                   {t.portalSubtitle}
@@ -71,7 +73,7 @@ const Navbar: React.FC = () => {
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as Language)}
                   className="bg-transparent border-none text-[11px] sm:text-xs font-semibold text-slate-700 cursor-pointer outline-none pr-0.5"
-                  title="Switch Language / ਭਾਸ਼ਾ ਬਦਲੋ"
+                  title={language === 'hindi' ? 'भाषा बदलें' : language === 'regional' ? 'ਭਾਸ਼ਾ ਬਦਲੋ' : 'Switch Language'}
                 >
                   <option value="english">EN</option>
                   <option value="hindi">HI (हिंदी)</option>
