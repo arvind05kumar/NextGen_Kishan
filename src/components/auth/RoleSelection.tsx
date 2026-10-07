@@ -1,110 +1,310 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Tractor, FlaskConical, Truck, Heart, Stethoscope } from 'lucide-react';
+import {
+  Tractor, FlaskConical, Truck, Heart, Stethoscope,
+  ArrowRight, ArrowLeft, Sparkles, CheckCircle2, Shield
+} from 'lucide-react';
+import leavesBg from '../../assets/Leaves-bg.png';
+import logo from '../../assets/nextgen-kisan.png';
+
+interface RoleData {
+  id: 'farmer' | 'lab' | 'vet' | 'driver' | 'ngo';
+  nameEn: string;
+  nameHi: string;
+  nameReg: string;
+  badgeEn: string;
+  badgeHi: string;
+  descriptionEn: string;
+  descriptionHi: string;
+  descriptionReg: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  gradient: string;
+  color: string;
+  bgLight: string;
+  borderColor: string;
+  emoji: string;
+}
+
+const rolesData: RoleData[] = [
+  {
+    id: 'farmer',
+    nameEn: 'Farmer',
+    nameHi: 'किसान',
+    nameReg: 'किसान (खेड़ूत)',
+    badgeEn: '🌾 Core User',
+    badgeHi: '🌾 मुख्य उपयोगकर्ता',
+    descriptionEn: 'Access soil testing, crop health scanning, veterinary visits & farm transport booking.',
+    descriptionHi: 'मृदा परीक्षण, फसल रोग स्कैनिंग, पशु चिकित्सा और कृषि परिवहन सेवाओं का सीधा लाभ उठाएं।',
+    descriptionReg: 'माटी जांच, फसल रोग जांच, पशु डॉक्टर और गाड़ी बुकिंग री सुविधा उठाओ।',
+    icon: Tractor,
+    gradient: 'linear-gradient(135deg, #15803d 0%, #22c55e 100%)',
+    color: '#16a34a',
+    bgLight: '#f0fdf4',
+    borderColor: '#86efac',
+    emoji: '🌾',
+  },
+  {
+    id: 'vet',
+    nameEn: 'Veterinarian',
+    nameHi: 'पशु चिकित्सक',
+    nameReg: 'पशु डॉक्टर',
+    badgeEn: '🩺 Healthcare',
+    badgeHi: '🩺 पशु स्वास्थ्य',
+    descriptionEn: 'Provide livestock healthcare, diagnosis, vaccinations & schedule on-farm home visits.',
+    descriptionHi: 'गाँव के पशुपालकों के मवेशियों की जांच, टीकाकरण और मौके पर जाकर चिकित्सा सेवाएं दें।',
+    descriptionReg: 'पशुवां री बीमारी री जांच, टीका अर मौके पर जा’र इलाज री सेवा देवो।',
+    icon: Stethoscope,
+    gradient: 'linear-gradient(135deg, #6d28d9 0%, #a855f7 100%)',
+    color: '#7c3aed',
+    bgLight: '#faf5ff',
+    borderColor: '#d8b4fe',
+    emoji: '🩺',
+  },
+  {
+    id: 'lab',
+    nameEn: 'Lab Technician',
+    nameHi: 'प्रयोगशाला तकनीशियन',
+    nameReg: 'जांच तकनीशियन',
+    badgeEn: '🔬 Testing & Reports',
+    badgeHi: '🔬 मृदा व फसल जांच',
+    descriptionEn: 'Process soil & crop samples, generate digital nutrient health cards and expert reports.',
+    descriptionHi: 'मिट्टी और फसल के नमूनों का वैज्ञानिक विश्लेषण करें और डिजिटल सॉइल हेल्थ कार्ड बनाएं।',
+    descriptionReg: 'माटी अर फसल नमूनों री जांच करो अर डिजिटल हेल्थ कार्ड जारी करो।',
+    icon: FlaskConical,
+    gradient: 'linear-gradient(135deg, #047857 0%, #10b981 100%)',
+    color: '#059669',
+    bgLight: '#ecfdf5',
+    borderColor: '#a7f3d0',
+    emoji: '🔬',
+  },
+  {
+    id: 'driver',
+    nameEn: 'Transport Driver',
+    nameHi: 'कृषि वाहन चालक',
+    nameReg: 'गाड़ी चालक',
+    badgeEn: '🚛 Logistics',
+    badgeHi: '🚛 कृषि परिवहन',
+    descriptionEn: 'Accept transport trips for crops, livestock, fertilizer and agricultural machinery delivery.',
+    descriptionHi: 'फसल, अनाज मंडी ढुलाई, मवेशी और कृषि उपकरणों के परिवहन ऑर्डर्स स्वीकार करें।',
+    descriptionReg: 'मंडी में फसल ले जावा, पशु अर खेती साजो-सामान री ढुलाई रो काम करो।',
+    icon: Truck,
+    gradient: 'linear-gradient(135deg, #c2410c 0%, #f97316 100%)',
+    color: '#ea580c',
+    bgLight: '#fff7ed',
+    borderColor: '#fed7aa',
+    emoji: '🚛',
+  },
+  {
+    id: 'ngo',
+    nameEn: 'NGO Worker',
+    nameHi: 'एनजीओ कार्यकर्ता',
+    nameReg: 'समाज सेवक',
+    badgeEn: '🤝 Community Welfare',
+    badgeHi: '🤝 किसान सहायता',
+    descriptionEn: 'Support underprivileged farmers, manage relief schemes, field workers and crisis response.',
+    descriptionHi: 'किसानों तक सरकारी व सामाजिक कल्याण योजनाएं, सहायता और आपातकालीन राहत पहुंचाएं।',
+    descriptionReg: 'किसानां ताईं सरकारी योजनावां, मदद अर आपदा में तुरंत राहत पहुंचाओ।',
+    icon: Heart,
+    gradient: 'linear-gradient(135deg, #be185d 0%, #ec4899 100%)',
+    color: '#db2777',
+    bgLight: '#fdf2f8',
+    borderColor: '#fbcfe8',
+    emoji: '🤝',
+  },
+];
 
 const RoleSelection: React.FC = () => {
-  const { setUser, setCurrentStep } = useAuth();
+  const { setUser, setCurrentStep, language } = useAuth();
 
-  const roles = [
-    {
-      id: 'farmer',
-      name: 'Farmer',
-      description: 'Access soil testing, crop scanning, and veterinary services',
-      icon: Tractor,
-      color: 'from-green-500 to-green-600'
-    },
-    {
-      id: 'lab',
-      name: 'Lab Technician',
-      description: 'Process soil and crop test requests',
-      icon: FlaskConical,
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
-      id: 'driver',
-      name: 'Driver',
-      description: 'Handle transport requests for animals and harvest',
-      icon: Truck,
-      color: 'from-orange-500 to-orange-600'
-    },
-    {
-      id: 'ngo',
-      name: 'NGO Worker',
-      description: 'Provide support and emergency assistance',
-      icon: Heart,
-      color: 'from-pink-500 to-pink-600'
-    },
-    {
-      id: 'vet',
-      name: 'Veterinarian',
-      description: 'Provide animal healthcare and treatment services',
-      icon: Stethoscope,
-      color: 'from-purple-500 to-purple-600'
-    }
-  ];
-
-  const handleRoleSelect = (role: any) => {
+  const handleRoleSelect = (roleId: string) => {
     setUser({
-      phone: '9876543210', // This would come from the previous step
-      role: role.id as any,
+      phone: '9876543210',
+      role: roleId as any,
       verified: false
     });
-    
-    if (role.id === 'farmer') {
+
+    if (roleId === 'farmer') {
       setCurrentStep('farmer-verification');
     } else {
       setCurrentStep('professional-verification');
     }
   };
 
+  const isHindi = language === 'hindi';
+  const isRegional = language === 'regional';
+
+  const headingText = isHindi
+    ? 'अपनी भूमिका का चयन करें'
+    : isRegional
+      ? 'आपणो काम चुणो'
+      : 'Select Your Role';
+
+  const subtitleText = isHindi
+    ? 'चुनें कि आप NextGen किसान पोर्टल पर किस रूप में जुड़ना चाहते हैं'
+    : isRegional
+      ? 'NextGen किसान पोर्टल माथे आप कस्या रूप में जुड़ना चाहो हो'
+      : 'Choose how you want to use the NextGen किसान platform';
+
+  const backText = isHindi
+    ? '← लॉगिन पर वापस जाएं'
+    : isRegional
+      ? '← पाछा लॉगिन पर जाओ'
+      : '← Back to login';
+
   return (
-    <div className="min-h-screen bg-[#D2F2D4] p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Your Role</h1>
-          <p className="text-gray-600">Choose how you want to use NextGen किसान</p>
+    <div
+      className="min-h-screen bg-cover bg-center py-10 px-4 flex flex-col justify-center"
+      style={{
+        backgroundImage: `linear-gradient(rgba(240, 253, 244, 0.92), rgba(220, 252, 231, 0.92)), url(${leavesBg})`,
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <div className="max-w-6xl mx-auto w-full">
+        
+        {/* Header Branding */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center gap-2 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-green-200 shadow-sm mb-4">
+            <Sparkles className="w-4 h-4 text-green-600" />
+            <span className="text-xs font-bold tracking-wider text-green-800 uppercase">
+              NextGen किसान • User Portals
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3">
+            {headingText}
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            {subtitleText}
+          </p>
         </div>
 
-        <div className="space-y-4">
-          {roles.map((role) => {
+        {/* Symmetrical Tiles Grid Layout */}
+        {/* Row 1: 3 tiles (Farmer, Vet, Lab). Row 2: 2 tiles symmetrically centered (Driver, NGO) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+          {rolesData.map((role, index) => {
             const IconComponent = role.icon;
+            const roleName = isHindi ? role.nameHi : isRegional ? role.nameReg : role.nameEn;
+            const roleBadge = isHindi ? role.badgeHi : role.badgeEn;
+            const roleDesc = isHindi ? role.descriptionHi : isRegional ? role.descriptionReg : role.descriptionEn;
+            const ctaText = isHindi ? `${roleName} के रूप में चुनें →` : `Continue as ${roleName} →`;
+
+            // Symmetry positioning for desktop (lg:grid-cols-6):
+            // 0: cols 1-2 (Row 1 Col 1)
+            // 1: cols 3-4 (Row 1 Col 2)
+            // 2: cols 5-6 (Row 1 Col 3)
+            // 3: cols 2-3 (Row 2 Col 1 centered)
+            // 4: cols 4-5 (Row 2 Col 2 centered)
+            let colClass = 'lg:col-span-2';
+            if (index === 3) {
+              colClass = 'lg:col-span-2 lg:col-start-2';
+            } else if (index === 4) {
+              colClass = 'lg:col-span-2';
+            }
+
+            // Tablet (sm:grid-cols-2) symmetry: last item centered across 2 cols
+            const tabletClass = index === 4 ? 'sm:col-span-2 sm:max-w-md sm:mx-auto w-full' : '';
+
             return (
-              <button
+              <div
                 key={role.id}
-                onClick={() => handleRoleSelect(role)}
-                className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 text-left w-full"
+                className={`${colClass} ${tabletClass} flex`}
               >
-                <div className="flex items-center">
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${role.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                    <IconComponent className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="ml-4 flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1 group-hover:text-green-700 transition-colors">
-                      {role.name}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {role.description}
+                <button
+                  onClick={() => handleRoleSelect(role.id)}
+                  className="group relative w-full bg-white rounded-2xl border-2 border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 p-6 flex flex-col justify-between text-left overflow-hidden hover:-translate-y-2 cursor-pointer outline-none"
+                  style={{
+                    backgroundColor: '#ffffff',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = role.color;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.9)';
+                  }}
+                >
+                  {/* Subtle Top Accent Strip */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1.5 transition-all duration-300 group-hover:h-2"
+                    style={{ background: role.gradient }}
+                  />
+
+                  {/* Top section: Icon & Badge */}
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-5 mt-1">
+                      {/* Floating Gradient Icon */}
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                        style={{ background: role.gradient }}
+                      >
+                        <IconComponent className="w-7 h-7 text-white" />
+                      </div>
+
+                      {/* Pill Badge */}
+                      <span
+                        className="text-xs font-bold px-3 py-1 rounded-full border shadow-sm"
+                        style={{
+                          backgroundColor: role.bgLight,
+                          color: role.color,
+                          borderColor: role.borderColor,
+                        }}
+                      >
+                        {roleBadge}
+                      </span>
+                    </div>
+
+                    {/* Role Title */}
+                    <div className="mb-2">
+                      <h3
+                        className="text-xl font-extrabold text-gray-900 transition-colors duration-200"
+                        style={{ color: '#0f172a' }}
+                      >
+                        {roleName}
+                      </h3>
+                      {/* Secondary English subtitle if viewing Hindi, or Hindi subtitle if viewing English */}
+                      <p className="text-xs font-semibold text-gray-400">
+                        {isHindi ? role.nameEn : role.nameHi}
+                      </p>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                      {roleDesc}
                     </p>
                   </div>
-                  <div className="ml-4 text-green-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+
+                  {/* Bottom Action Footer */}
+                  <div
+                    className="pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-bold transition-colors duration-200"
+                    style={{ color: role.color }}
+                  >
+                    <span>{ctaText}</span>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1"
+                      style={{
+                        backgroundColor: role.bgLight,
+                        border: `1px solid ${role.borderColor}`
+                      }}
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             );
           })}
         </div>
 
-        <div className="text-center mt-8">
+        {/* Back Link */}
+        <div className="text-center mt-10">
           <button
             onClick={() => setCurrentStep('login')}
-            className="text-gray-500 hover:text-gray-700 text-sm"
+            className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-green-700 bg-white/70 hover:bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm transition-all duration-200 hover:shadow"
           >
-            ← Back to login
+            <ArrowLeft className="w-4 h-4" />
+            {backText}
           </button>
         </div>
+
       </div>
     </div>
   );

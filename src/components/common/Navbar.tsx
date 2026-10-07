@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, User, MapPin, Sprout, ChevronDown } from 'lucide-react';
+import { LogOut, User, MapPin, Sprout, ChevronDown, Globe } from 'lucide-react';
 import UserProfileModal from './UserProfileModal';
+import { getTranslation, Language } from '../../utils/translations';
 
-const roleConfig: Record<string, { label: string; hindiLabel: string; color: string; bg: string; emoji: string }> = {
-  farmer: { label: 'Farmer', hindiLabel: 'किसान', color: '#16a34a', bg: '#f0fdf4', emoji: '🌾' },
-  lab: { label: 'Lab Technician', hindiLabel: 'लैब तकनीशियन', color: '#059669', bg: '#ecfdf5', emoji: '🔬' },
-  driver: { label: 'Driver', hindiLabel: 'चालक', color: '#ea580c', bg: '#fff7ed', emoji: '🚛' },
-  ngo: { label: 'NGO Worker', hindiLabel: 'एनजीओ', color: '#db2777', bg: '#fdf2f8', emoji: '🤝' },
-  vet: { label: 'Veterinarian', hindiLabel: 'पशु चिकित्सक', color: '#7c3aed', bg: '#faf5ff', emoji: '🩺' },
+const roleVisuals: Record<string, { color: string; bg: string; emoji: string }> = {
+  farmer: { color: '#16a34a', bg: '#f0fdf4', emoji: '🌾' },
+  lab: { color: '#059669', bg: '#ecfdf5', emoji: '🔬' },
+  driver: { color: '#ea580c', bg: '#fff7ed', emoji: '🚛' },
+  ngo: { color: '#db2777', bg: '#fdf2f8', emoji: '🤝' },
+  vet: { color: '#7c3aed', bg: '#faf5ff', emoji: '🩺' },
 };
 
 const Navbar: React.FC = () => {
-  const { user, setUser, setCurrentStep } = useAuth();
+  const { user, setUser, setCurrentStep, language, setLanguage } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleLogout = () => {
@@ -22,18 +23,26 @@ const Navbar: React.FC = () => {
 
   if (!user) return null;
 
-  const config = roleConfig[user.role] || { label: user.role, hindiLabel: 'उपयोगकर्ता', color: '#16a34a', bg: '#f0fdf4', emoji: '👤' };
+  const t = getTranslation(language);
+  const visual = roleVisuals[user.role] || { color: '#16a34a', bg: '#f0fdf4', emoji: '👤' };
+  const roleLabel = t.roles[user.role as keyof typeof t.roles] || user.role;
+
+  const isEnglish = language === 'english';
+  const defaultProfileName = user.role === 'farmer'
+    ? (isEnglish ? 'Farmer Profile' : 'किसान प्रोफाइल')
+    : (isEnglish ? 'User Profile' : 'यूजर प्रोफाइल');
 
   return (
     <>
       <nav style={{
         background: 'white',
         boxShadow: '0 1px 16px rgba(0,0,0,0.07)',
-        borderBottom: `3px solid ${config.color}`,
+        borderBottom: `3px solid ${visual.color}`,
         position: 'sticky', top: 0, zIndex: 50
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.25rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
+
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div style={{
@@ -46,34 +55,69 @@ const Navbar: React.FC = () => {
               </div>
               <div>
                 <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111827', lineHeight: 1 }}>
-                  NextGen <span style={{ color: config.color }}>किसान</span>
+                  NextGen <span style={{ color: visual.color }}>किसान</span>
                 </div>
-                <div style={{ fontSize: '0.65rem', color: '#9ca3af', letterSpacing: '0.05em', fontWeight: 600 }}>AGRICULTURAL PORTAL</div>
+                <div style={{ fontSize: '0.625rem', color: '#9ca3af', letterSpacing: '0.05em', fontWeight: 600 }}>
+                  {t.portalSubtitle}
+                </div>
               </div>
             </div>
 
-            {/* Right side items: Role Badge + Clickable User Profile + Logout */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Right side items */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+
+              {/* Language Switcher Dropdown in Navbar */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                padding: '0.2rem 0.4rem',
+                gap: '0.25rem'
+              }}>
+                <Globe style={{ width: '13px', height: '13px', color: '#64748b' }} />
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value as Language)}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    color: '#334155',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    padding: '0.1rem 0'
+                  }}
+                  title="Switch Language / भाषा बदलें"
+                >
+                  <option value="english">EN (English)</option>
+                  <option value="hindi">HI (हिंदी)</option>
+                  <option value="regional">REG (Regional)</option>
+                </select>
+              </div>
+
               {/* Role Badge */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: '0.4rem',
-                background: config.bg, color: config.color,
-                border: `1px solid ${config.color}35`,
-                padding: '0.35rem 0.8rem', borderRadius: '9999px',
+                display: 'flex', alignItems: 'center', gap: '0.35rem',
+                background: visual.bg, color: visual.color,
+                border: `1px solid ${visual.color}35`,
+                padding: '0.3rem 0.75rem', borderRadius: '9999px',
                 fontSize: '0.8rem', fontWeight: 700
               }}>
-                <span>{config.emoji}</span>
-                <span>{config.hindiLabel}</span>
+                <span>{visual.emoji}</span>
+                <span className="hidden sm:inline">{roleLabel}</span>
               </div>
 
               {/* Location (hidden on very small screens) */}
               {user.location && (
                 <div
-                  className="hidden md:flex"
+                  className="hidden lg:flex"
                   style={{ alignItems: 'center', gap: '0.25rem', color: '#6b7280', fontSize: '0.8rem' }}
                 >
                   <MapPin style={{ width: '14px', height: '14px', color: '#ef4444' }} />
-                  <span style={{ maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {user.location}
                   </span>
                 </div>
@@ -83,7 +127,7 @@ const Navbar: React.FC = () => {
               <button
                 id="user-profile-button"
                 onClick={() => setIsProfileOpen(true)}
-                title="प्रोफाइल देखें / View Profile"
+                title={t.viewProfile}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.5rem',
                   padding: '0.35rem 0.65rem',
@@ -98,8 +142,8 @@ const Navbar: React.FC = () => {
                   outline: 'none'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = config.bg;
-                  e.currentTarget.style.borderColor = `${config.color}60`;
+                  e.currentTarget.style.background = visual.bg;
+                  e.currentTarget.style.borderColor = `${visual.color}60`;
                   e.currentTarget.style.transform = 'translateY(-1px)';
                   e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
                 }}
@@ -112,31 +156,31 @@ const Navbar: React.FC = () => {
               >
                 <div style={{
                   width: '32px', height: '32px', borderRadius: '50%',
-                  background: config.bg,
+                  background: visual.bg,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: `2px solid ${config.color}`,
+                  border: `2px solid ${visual.color}`,
                   flexShrink: 0
                 }}>
-                  <User style={{ width: '16px', height: '16px', color: config.color }} />
+                  <User style={{ width: '16px', height: '16px', color: visual.color }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
-                  <span style={{ lineHeight: 1.1, fontSize: '0.85rem', fontWeight: 700, color: '#1f2937' }}>
-                    {user.name || (user.role === 'farmer' ? 'किसान प्रोफाइल' : (user.phone || 'यूजर प्रोफाइल'))}
+                  <span style={{ lineHeight: 1.1, fontSize: '0.825rem', fontWeight: 700, color: '#1f2937' }}>
+                    {user.name || defaultProfileName}
                   </span>
-                  <span style={{ fontSize: '0.65rem', color: config.color, fontWeight: 600 }}>
-                    प्रोफाइल देखें
+                  <span style={{ fontSize: '0.65rem', color: visual.color, fontWeight: 600 }}>
+                    {t.viewProfile}
                   </span>
                 </div>
-                <ChevronDown style={{ width: '14px', height: '14px', color: '#94a3b8', marginLeft: '0.2rem' }} />
+                <ChevronDown style={{ width: '14px', height: '14px', color: '#94a3b8', marginLeft: '0.15rem' }} />
               </button>
 
               {/* Quick Logout Button */}
               <button
                 onClick={handleLogout}
-                title="लॉगआउट करें"
+                title={t.logout}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.35rem',
-                  padding: '0.45rem 0.85rem', borderRadius: '10px',
+                  padding: '0.45rem 0.8rem', borderRadius: '10px',
                   background: '#fef2f2', color: '#dc2626',
                   border: '1px solid #fecaca',
                   fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
@@ -152,7 +196,7 @@ const Navbar: React.FC = () => {
                 }}
               >
                 <LogOut style={{ width: '14px', height: '14px' }} />
-                <span className="hidden sm:inline">Logout</span>
+                <span className="hidden md:inline">{t.logout}</span>
               </button>
             </div>
           </div>
