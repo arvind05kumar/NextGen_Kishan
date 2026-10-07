@@ -8,6 +8,8 @@ interface AuthContextType {
   setCurrentStep: (step: string) => void;
   language: string;
   setLanguage: (lang: string) => void;
+  phoneNumber: string;
+  setPhoneNumber: (phone: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,6 +26,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [currentStep, setCurrentStep] = useState('login');
   const [language, setLanguage] = useState('english');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   return (
     <AuthContext.Provider value={{
@@ -32,7 +35,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       currentStep,
       setCurrentStep,
       language,
-      setLanguage
+      setLanguage,
+      phoneNumber,
+      setPhoneNumber
     }}>
       {children}
     </AuthContext.Provider>

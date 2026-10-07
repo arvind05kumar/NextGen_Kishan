@@ -114,11 +114,11 @@ const rolesData: RoleData[] = [
 ];
 
 const RoleSelection: React.FC = () => {
-  const { setUser, setCurrentStep, language } = useAuth();
+  const { user, setUser, setCurrentStep, language, phoneNumber } = useAuth();
 
   const handleRoleSelect = (roleId: string) => {
     setUser({
-      phone: '9876543210',
+      phone: phoneNumber || user?.phone || '9876543210',
       role: roleId as any,
       verified: false
     });
