@@ -97,7 +97,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '1rem',
+          padding: 'clamp(0.5rem, 2.5vw, 1rem)',
           backgroundColor: 'rgba(15, 23, 42, 0.65)',
           backdropFilter: 'blur(6px)',
           animation: 'fadeIn 0.2s ease-out',
@@ -388,7 +388,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 <FileText style={{ width: '14px', height: '14px', color: theme.color }} />
                 {t.identitySection}
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
                 <div>
                   <div style={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 500 }}>{t.phoneLabel}</div>
                   <div style={{ fontWeight: 600, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.15rem' }}>
@@ -432,7 +432,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                   <Sprout style={{ width: '14px', height: '14px', color: '#16a34a' }} />
                   {t.farmSection}
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
                   <div style={{ backgroundColor: '#ffffff', padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid #dcfce7' }}>
                     <div style={{ color: '#64748b', fontSize: '0.75rem' }}>{t.totalLand}</div>
                     <div style={{ fontWeight: 700, color: '#166534', marginTop: '0.15rem' }}>{t.totalLandValue}</div>
@@ -467,7 +467,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                   <Award style={{ width: '14px', height: '14px', color: theme.color }} />
                   {t.profSection}
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', fontSize: '0.85rem' }}>
                   <div style={{ backgroundColor: '#ffffff', padding: '0.6rem 0.75rem', borderRadius: '8px', border: `1px solid ${theme.color}20` }}>
                     <div style={{ color: '#64748b', fontSize: '0.75rem' }}>{t.licenseLabel}</div>
                     <div style={{ fontWeight: 700, color: '#1e293b', marginTop: '0.15rem' }}>

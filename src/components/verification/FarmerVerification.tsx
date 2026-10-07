@@ -45,20 +45,20 @@ const FarmerVerification: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#D2F2D4] p-4">
+    <div className="min-h-screen bg-[#D2F2D4] py-6 px-3 sm:py-10 sm:px-6">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="bg-green-600 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="bg-green-600 w-14 h-14 sm:w-16 sm:h-16 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center shadow-md">
+            <CreditCard className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Aadhaar Verification</h1>
-          <p className="text-gray-600">Please scan your Aadhaar card for verification</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1.5">Aadhaar Verification</h1>
+          <p className="text-sm text-gray-600">Please scan your Aadhaar card for verification</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
           {!scanned ? (
             <div className="text-center">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-6">
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-5 sm:p-8 mb-6">
                 {scanning ? (
                   <div className="space-y-4">
                     <div className="w-24 h-24 mx-auto bg-green-100 rounded-full flex items-center justify-center">
@@ -140,7 +140,7 @@ const FarmerVerification: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex space-x-4 pt-6">
+              <div className="flex flex-col sm:flex-row gap-3 pt-6">
                 <button
                   onClick={() => setScanned(false)}
                   className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"

@@ -57,44 +57,44 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-6 border-b">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b">
           <div className="flex items-center space-x-3">
             <div className="bg-purple-100 p-2 rounded-lg">
-              <Camera className="w-6 h-6 text-purple-600" />
+              <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Crop Health Scanner</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Crop Health Scanner</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {!analysisComplete ? (
             <>
               {/* Image Upload Section */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                   Upload Crop Image
                 </label>
                 
                 {!selectedImage ? (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <div className="space-y-4">
-                      <Image className="w-16 h-16 mx-auto text-gray-400" />
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-8 text-center">
+                    <div className="space-y-3 sm:space-y-4">
+                      <Image className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-400" />
                       <div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1 sm:mb-2">
                           Upload crop image for analysis
                         </h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-xs sm:text-sm text-gray-600 mb-4">
                           Take a clear photo of affected crop parts or upload from gallery
                         </p>
-                        <div className="flex justify-center space-x-4">
+                        <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
                           <label className="cursor-pointer">
                             <input
                               type="file"
@@ -103,8 +103,8 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
                               onChange={handleImageUpload}
                               className="hidden"
                             />
-                            <div className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2">
-                              <Camera className="w-5 h-5" />
+                            <div className="bg-purple-600 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base">
+                              <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
                               <span>Take Photo</span>
                             </div>
                           </label>
@@ -115,8 +115,8 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
                               onChange={handleImageUpload}
                               className="hidden"
                             />
-                            <div className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors flex items-center space-x-2">
-                              <Upload className="w-5 h-5" />
+                            <div className="border border-purple-600 text-purple-600 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-lg hover:bg-purple-50 transition-colors flex items-center space-x-2 text-sm sm:text-base">
+                              <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
                               <span>Upload</span>
                             </div>
                           </label>
@@ -257,20 +257,20 @@ const CropScanningModal: React.FC<CropScanningModalProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
                   onClick={() => {
                     setAnalysisComplete(false);
                     setSelectedImage(null);
                     setCropType('');
                   }}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium order-2 sm:order-1"
                 >
                   Analyze Another
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  className="flex-1 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm sm:text-base font-semibold order-1 sm:order-2"
                 >
                   Done
                 </button>

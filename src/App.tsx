@@ -40,7 +40,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${currentStep === 'login' ? 'bg-[#06180c]' : 'bg-[#D2F2D4]'}`}>
+    <div className={`min-h-screen w-full overflow-x-hidden ${currentStep === 'login' ? 'bg-[#06180c]' : 'bg-[#D2F2D4]'}`}>
       <Navbar />
       {renderCurrentStep()}
     </div>

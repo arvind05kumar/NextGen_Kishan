@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   TestTube2, Stethoscope, Camera, Truck, ArrowRight,
-  Leaf, Sun, CloudRain, Wind, TrendingUp, Bell, Star,
+  Sun, CloudRain, Wind, TrendingUp, Bell, Star,
   CheckCircle, Clock, AlertCircle, Sprout, BarChart3, Wheat,
-  Bot, MessageSquare, Sparkles
+  Bot
 } from 'lucide-react';
 import SoilCropTestModal from './modals/SoilCropTestModal';
 import VetServiceModal from './modals/VetServiceModal';
@@ -17,35 +17,38 @@ const FarmerDashboard: React.FC = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [isBhoomiOpen, setIsBhoomiOpen] = useState(false);
 
+  const isHindi = language === 'hindi';
+  const isPunjabi = language === 'regional';
+
   const services = [
     {
       id: 'soil-crop-test',
-      title: 'Soil & Crop Test',
-      description: 'Get your soil analyzed and crop health checked by certified laboratories nearby',
+      title: isHindi ? 'मृदा व फसल परीक्षण' : isPunjabi ? 'ਮਿੱਟੀ ਤੇ ਫ਼ਸਲ ਪਰਖ' : 'Soil & Crop Test',
+      description: isHindi ? 'नजदीकी प्रयोगशालाओं से मिट्टी और फसल स्वास्थ्य की वैज्ञानिक जांच करवाएं' : isPunjabi ? 'ਨੇੜਲੀਆਂ ਲੈਬਾਂ ਤੋਂ ਮਿੱਟੀ ਅਤੇ ਫ਼ਸਲ ਦੀ ਵਿਗਿਆਨਕ ਪਰਖ ਕਰਵਾਓ' : 'Get your soil analyzed and crop health checked by certified laboratories nearby',
       icon: TestTube2,
       gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
       bgGlass: 'rgba(34,197,94,0.08)',
       borderColor: '#22c55e',
-      badge: 'Most Popular',
+      badge: isHindi ? 'सर्वाधिक लोकप्रिय' : isPunjabi ? 'ਸਭ ਤੋਂ ਵੱਧ ਪ੍ਰਸਿੱਧ' : 'Most Popular',
       badgeColor: '#22c55e',
       stats: '2-3 days result'
     },
     {
       id: 'vet-service',
-      title: 'Veterinary Services',
-      description: 'Home veterinary visits for your livestock — health checks and emergency treatment',
+      title: isHindi ? 'पशु चिकित्सा सेवाएं' : isPunjabi ? 'ਪਸ਼ੂ ਚਿਕਿਤਸਾ ਸੇਵਾਵਾਂ' : 'Veterinary Services',
+      description: isHindi ? 'पशुओं के स्वास्थ्य परीक्षण, टीकाकरण और इलाज के लिए डॉक्टर घर बुलाएं' : isPunjabi ? 'ਪਸ਼ੂਆਂ ਦੇ ਇਲਾਜ, ਟੀਕਾਕਰਨ ਅਤੇ ਜਾਂਚ ਲਈ ਡਾਕਟਰ ਘਰ ਬੁਲਾਓ' : 'Home veterinary visits for your livestock — health checks and emergency treatment',
       icon: Stethoscope,
       gradient: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
       bgGlass: 'rgba(168,85,247,0.08)',
       borderColor: '#a855f7',
-      badge: 'Home Visit',
+      badge: isHindi ? 'होम विजिट' : isPunjabi ? 'ਘਰ ਆ ਕੇ ਸੇਵਾ' : 'Home Visit',
       badgeColor: '#a855f7',
       stats: 'Same day available'
     },
     {
       id: 'crop-scanning',
-      title: 'AI Crop Scanning',
-      description: 'Upload crop photos for instant AI-powered disease detection and treatment advice',
+      title: isHindi ? 'AI फसल रोग स्कैन' : isPunjabi ? 'AI ਫ਼ਸਲ ਰੋਗ ਸਕੈਨ' : 'AI Crop Scanning',
+      description: isHindi ? 'फसल की फोटो अपलोड करके बीमारी का तुरंत निदान और उपचार सलाह पाएं' : isPunjabi ? 'ਫ਼ਸਲ ਦੀ ਫ਼ੋਟੋ ਅਪਲੋਡ ਕਰਕੇ ਤੁਰੰਤ ਰੋਗ ਨਿਦਾਨ ਅਤੇ ਸਲਾਹ ਲਵੋ' : 'Upload crop photos for instant AI-powered disease detection and treatment advice',
       icon: Camera,
       gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
       bgGlass: 'rgba(59,130,246,0.08)',
@@ -56,8 +59,8 @@ const FarmerDashboard: React.FC = () => {
     },
     {
       id: 'transport',
-      title: 'Transport Services',
-      description: 'Book trucks and vehicles for harvest, livestock, and agricultural equipment',
+      title: isHindi ? 'कृषि वाहन व परिवहन' : isPunjabi ? 'ਖੇਤੀਬਾੜੀ ਢੋਆ-ਢੁਆਈ' : 'Transport Services',
+      description: isHindi ? 'फसल मंडी ढुलाई, मवेशी और कृषि उपकरणों के लिए वाहन बुक करें' : isPunjabi ? 'ਮੰਡੀ ਫ਼ਸਲ ਲਿਜਾਣ ਅਤੇ ਖੇਤੀ ਸੰਦਾਂ ਲਈ ਗੱਡੀਆਂ ਬੁੱਕ ਕਰੋ' : 'Book trucks and vehicles for harvest, livestock, and agricultural equipment',
       icon: Truck,
       gradient: 'linear-gradient(135deg, #f97316 0%, #c2410c 100%)',
       bgGlass: 'rgba(249,115,22,0.08)',
@@ -69,10 +72,10 @@ const FarmerDashboard: React.FC = () => {
   ];
 
   const quickStats = [
-    { label: 'Active Requests', value: '3', icon: Clock, color: '#f59e0b', bg: '#fef3c7' },
-    { label: 'Completed Services', value: '12', icon: CheckCircle, color: '#22c55e', bg: '#dcfce7' },
-    { label: 'Crop Health Score', value: '87%', icon: TrendingUp, color: '#3b82f6', bg: '#dbeafe' },
-    { label: 'Alerts', value: '1', icon: AlertCircle, color: '#ef4444', bg: '#fee2e2' },
+    { label: isHindi ? 'सक्रिय अनुरोध' : isPunjabi ? 'ਚਾਲੂ ਬੇਨਤੀਆਂ' : 'Active Requests', value: '3', icon: Clock, color: '#f59e0b', bg: '#fef3c7' },
+    { label: isHindi ? 'पूर्ण सेवाएं' : isPunjabi ? 'ਮੁਕੰਮਲ ਸੇਵਾਵਾਂ' : 'Completed', value: '12', icon: CheckCircle, color: '#22c55e', bg: '#dcfce7' },
+    { label: isHindi ? 'फसल स्वास्थ्य' : isPunjabi ? 'ਫ਼ਸਲ ਸਿਹਤ ਸਕੋਰ' : 'Crop Score', value: '87%', icon: TrendingUp, color: '#3b82f6', bg: '#dbeafe' },
+    { label: isHindi ? 'अलर्ट' : isPunjabi ? 'ਚੇਤਾਵਨੀਆਂ' : 'Alerts', value: '1', icon: AlertCircle, color: '#ef4444', bg: '#fee2e2' },
   ];
 
   const recentActivity = [
@@ -90,187 +93,166 @@ const FarmerDashboard: React.FC = () => {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%)' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%)' }}>
+      
       {/* Hero Welcome Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #388e3c 100%)',
-        padding: '2rem 1.5rem',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Background decorative elements */}
-        <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
-        <div style={{ position: 'absolute', bottom: '-60px', right: '100px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
-        <div style={{ position: 'absolute', top: '10px', left: '60%', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)' }} />
+      <div
+        className="relative overflow-hidden py-6 px-4 sm:py-8 sm:px-6"
+        style={{
+          background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #388e3c 100%)',
+        }}
+      >
+        {/* Background decorative circles */}
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-16 right-24 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="max-w-7xl mx-auto relative">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <Sprout style={{ width: '20px', height: '20px', color: '#86efac' }} />
-                <span style={{ color: '#86efac', fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.05em' }}>NEXTGEN KISAN PORTAL</span>
+              <div className="flex items-center gap-2 mb-2">
+                <Sprout className="w-5 h-5 text-emerald-300 shrink-0" />
+                <span className="text-emerald-300 text-xs sm:text-sm font-bold tracking-wider uppercase">
+                  NEXTGEN KISAN PORTAL
+                </span>
               </div>
-              <h1 style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.2 }}>
-                Namaste, {user?.name || 'Kisan'} 🙏
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-extrabold mb-1.5 leading-tight">
+                Namaste, {user?.name || (isHindi ? 'किसान भाई' : isPunjabi ? 'ਕਿਸਾਨ ਵੀਰ' : 'Kisan')} 🙏
               </h1>
-              <p style={{ color: '#bbf7d0', fontSize: '1rem', marginBottom: '1rem' }}>
-                📍 {user?.location || 'Dungarpur, Rajasthan'} • Your farm dashboard is ready
+              <p className="text-emerald-100 text-sm sm:text-base mb-3">
+                📍 {user?.location || 'Dungarpur, Rajasthan'} • {isHindi ? 'आपका फार्म डैशबोर्ड तैयार है' : isPunjabi ? 'ਤੁਹਾਡਾ ਫਾਰਮ ਡੈਸ਼ਬੋਰਡ ਤਿਆਰ ਹੈ' : 'Your farm dashboard is ready'}
               </p>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ background: 'rgba(134,239,172,0.2)', border: '1px solid rgba(134,239,172,0.4)', color: '#86efac', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 600 }}>
+              <div className="flex gap-2 flex-wrap">
+                <span className="bg-emerald-400/20 border border-emerald-400/40 text-emerald-200 px-3 py-1 rounded-full text-xs font-semibold">
                   ✅ Verified Farmer
                 </span>
-                <span style={{ background: 'rgba(253,224,71,0.2)', border: '1px solid rgba(253,224,71,0.4)', color: '#fde047', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 600 }}>
+                <span className="bg-yellow-400/20 border border-yellow-400/40 text-yellow-300 px-3 py-1 rounded-full text-xs font-semibold">
                   ⭐ 4.8 Rating
                 </span>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <button style={{
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                color: 'white',
-                padding: '0.5rem',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                backdropFilter: 'blur(10px)'
-              }}>
-                <Bell style={{ width: '20px', height: '20px' }} />
+
+            <div className="flex gap-3 items-center self-end sm:self-auto shrink-0">
+              <button
+                className="bg-white/15 hover:bg-white/25 border border-white/30 text-white p-2.5 rounded-xl cursor-pointer backdrop-blur-md transition-colors"
+                title="Notifications"
+              >
+                <Bell className="w-5 h-5" />
               </button>
-              <div style={{
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                borderRadius: '12px',
-                padding: '0.75rem 1rem',
-                backdropFilter: 'blur(10px)',
-                textAlign: 'center'
-              }}>
-                <div style={{ color: '#86efac', fontSize: '0.75rem', fontWeight: 600 }}>SEASON</div>
-                <div style={{ color: 'white', fontWeight: 700 }}>Rabi 2025</div>
-                <div style={{ color: '#bbf7d0', fontSize: '0.75rem' }}>Active</div>
+              <div className="bg-white/15 border border-white/30 rounded-xl px-3.5 py-2 backdrop-blur-md text-center">
+                <div className="text-emerald-300 text-[10px] font-bold tracking-wider">SEASON</div>
+                <div className="text-white font-bold text-sm">Rabi 2025</div>
+                <div className="text-emerald-200 text-[10px]">Active</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem' }}>
+      {/* Main Dashboard Container */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6">
 
-        {/* Quick Stats Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem', marginTop: '-1rem' }}>
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 -mt-3 sm:-mt-5 relative z-10">
           {quickStats.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <div key={i} style={{
-                background: 'white',
-                borderRadius: '16px',
-                padding: '1rem',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'transform 0.2s',
-                cursor: 'default'
-              }}
-                onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+              <div
+                key={i}
+                className="bg-white rounded-2xl p-3.5 sm:p-4 shadow-md flex items-center gap-3 transition-transform hover:-translate-y-0.5"
               >
-                <div style={{ background: stat.bg, borderRadius: '10px', padding: '0.5rem', flexShrink: 0 }}>
-                  <Icon style={{ width: '18px', height: '18px', color: stat.color }} />
+                <div
+                  className="rounded-xl p-2.5 shrink-0"
+                  style={{ background: stat.bg }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
-                <div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{stat.value}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500 }}>{stat.label}</div>
+                <div className="min-w-0">
+                  <div className="text-lg sm:text-2xl font-extrabold text-gray-900 leading-tight">
+                    {stat.value}
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-gray-500 font-medium truncate">
+                    {stat.label}
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '1.5rem', alignItems: 'start' }}>
-          <div>
+        {/* Responsive Grid: Services (Left) + Sidebar (Right on desktop, stacked on mobile) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_310px] gap-6 items-start">
+          
+          {/* Main Column */}
+          <div className="space-y-6">
+            
             {/* Services Section */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <Wheat style={{ width: '20px', height: '20px', color: '#16a34a' }} />
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>Agricultural Services</h2>
+            <div>
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <Wheat className="w-5 h-5 text-green-600 shrink-0" />
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                  {isHindi ? 'कृषि सेवाएं' : isPunjabi ? 'ਖੇਤੀਬਾੜੀ ਸੇਵਾਵਾਂ' : 'Agricultural Services'}
+                </h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+
+              {/* 2-column on tablet/desktop, 1-column on small mobile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {services.map((service) => {
                   const Icon = service.icon;
                   return (
                     <div
                       key={service.id}
                       onClick={() => setActiveModal(service.id)}
+                      className="group relative bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-slate-100 hover:-translate-y-1"
                       style={{
-                        background: 'white',
-                        borderRadius: '20px',
-                        padding: '1.5rem',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.07)',
-                        cursor: 'pointer',
-                        border: `1px solid ${service.borderColor}22`,
-                        transition: 'all 0.3s ease',
-                        position: 'relative',
-                        overflow: 'hidden'
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'translateY(-4px)';
-                        e.currentTarget.style.boxShadow = `0 12px 40px ${service.borderColor}30`;
-                        e.currentTarget.style.borderColor = `${service.borderColor}66`;
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.07)';
-                        e.currentTarget.style.borderColor = `${service.borderColor}22`;
+                        borderColor: `${service.borderColor}30`,
                       }}
                     >
-                      {/* Gradient bg blob */}
-                      <div style={{
-                        position: 'absolute', top: '-20px', right: '-20px',
-                        width: '100px', height: '100px', borderRadius: '50%',
-                        background: service.bgGlass
-                      }} />
+                      {/* Gradient background blob */}
+                      <div
+                        className="absolute -top-6 -right-6 w-28 h-28 rounded-full pointer-events-none transition-transform group-hover:scale-125"
+                        style={{ background: service.bgGlass }}
+                      />
+
                       {/* Badge */}
-                      <span style={{
-                        position: 'absolute', top: '1rem', right: '1rem',
-                        background: `${service.badgeColor}15`,
-                        color: service.badgeColor,
-                        fontSize: '0.7rem', fontWeight: 700,
-                        padding: '0.2rem 0.6rem', borderRadius: '9999px',
-                        border: `1px solid ${service.badgeColor}30`
-                      }}>
+                      <span
+                        className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-1 rounded-full border"
+                        style={{
+                          background: `${service.badgeColor}15`,
+                          color: service.badgeColor,
+                          borderColor: `${service.badgeColor}35`,
+                        }}
+                      >
                         {service.badge}
                       </span>
 
-                      <div style={{
-                        width: '52px', height: '52px', borderRadius: '14px',
-                        background: service.gradient,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        marginBottom: '1rem',
-                        boxShadow: `0 4px 12px ${service.borderColor}40`
-                      }}>
-                        <Icon style={{ width: '26px', height: '26px', color: 'white' }} />
+                      {/* Icon */}
+                      <div
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3.5 shadow-md"
+                        style={{ background: service.gradient }}
+                      >
+                        <Icon className="w-6 h-6 text-white" />
                       </div>
 
-                      <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>
+                      <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1.5">
                         {service.title}
                       </h3>
-                      <p style={{ fontSize: '0.85rem', color: '#6b7280', lineHeight: 1.5, marginBottom: '1rem' }}>
+                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed mb-4">
                         {service.description}
                       </p>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.75rem', color: service.borderColor, fontWeight: 600 }}>
+                      <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                        <span
+                          className="text-xs font-semibold"
+                          style={{ color: service.borderColor }}
+                        >
                           ⏱ {service.stats}
                         </span>
-                        <div style={{
-                          display: 'flex', alignItems: 'center', gap: '0.25rem',
-                          color: service.borderColor, fontWeight: 600, fontSize: '0.85rem'
-                        }}>
-                          <span>Book Now</span>
-                          <ArrowRight style={{ width: '14px', height: '14px' }} />
+                        <div
+                          className="flex items-center gap-1 font-bold text-xs sm:text-sm group-hover:translate-x-1 transition-transform"
+                          style={{ color: service.borderColor }}
+                        >
+                          <span>{isHindi ? 'बुक करें' : isPunjabi ? 'ਬੁੱਕ ਕਰੋ' : 'Book Now'}</span>
+                          <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
@@ -279,146 +261,161 @@ const FarmerDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Recent Activity */}
-            <div style={{ background: 'white', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>Recent Activity</h2>
-                <button style={{ color: '#16a34a', fontSize: '0.8rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>
-                  View All →
+            {/* Recent Activity Card */}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-100">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base sm:text-lg font-bold text-gray-900">
+                  {isHindi ? 'हालिया गतिविधियां' : isPunjabi ? 'ਤਾਜ਼ਾ ਗਤੀਵਿਧੀਆਂ' : 'Recent Activity'}
+                </h2>
+                <button className="text-green-600 text-xs sm:text-sm font-semibold hover:underline cursor-pointer">
+                  {isHindi ? 'सभी देखें →' : isPunjabi ? 'ਸਭ ਵੇਖੋ →' : 'View All →'}
                 </button>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+
+              <div className="flex flex-col gap-3">
                 {recentActivity.map((item, i) => (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'center', gap: '0.75rem',
-                    padding: '0.875rem', borderRadius: '12px',
-                    background: '#f9fafb',
-                    border: '1px solid #f3f4f6',
-                    transition: 'background 0.2s'
-                  }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#f0fdf4')}
-                    onMouseLeave={e => (e.currentTarget.style.background = '#f9fafb')}
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-slate-50 hover:bg-green-50/50 border border-slate-100 transition-colors"
                   >
-                    <div style={{
-                      width: '40px', height: '40px', borderRadius: '12px',
-                      background: `${item.color}15`, display: 'flex',
-                      alignItems: 'center', justifyContent: 'center',
-                      fontSize: '1.2rem', flexShrink: 0
-                    }}>
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
+                      style={{ background: `${item.color}15` }}
+                    >
                       {item.icon}
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.875rem' }}>{item.title}</div>
-                      <div style={{ color: '#6b7280', fontSize: '0.75rem', marginTop: '0.1rem' }}>{item.desc}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-gray-900 text-xs sm:text-sm truncate">
+                        {item.title}
+                      </div>
+                      <div className="text-gray-500 text-[11px] sm:text-xs truncate">
+                        {item.desc}
+                      </div>
                     </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{item.time}</div>
+                    <div className="text-right shrink-0">
+                      <div className="text-[10px] text-gray-400">{item.time}</div>
                       {item.status === 'new' && (
-                        <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: '0.65rem', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>NEW</span>
+                        <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                          NEW
+                        </span>
                       )}
                       {item.status === 'warning' && (
-                        <span style={{ background: '#fef3c7', color: '#d97706', fontSize: '0.65rem', padding: '0.1rem 0.4rem', borderRadius: '9999px', fontWeight: 700 }}>ACTION</span>
+                        <span className="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                          ACTION
+                        </span>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
           </div>
 
-          {/* Right Sidebar */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* Sidebar (Weather, Crop Health, Farm Tips) */}
+          <div className="flex flex-col gap-4 sm:gap-5">
+            
             {/* Weather Widget */}
-            <div style={{
-              background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-              borderRadius: '20px',
-              padding: '1.25rem',
-              boxShadow: '0 8px 32px rgba(14,165,233,0.3)',
-              color: 'white'
-            }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 600, opacity: 0.8, marginBottom: '0.5rem', letterSpacing: '0.05em' }}>🌤 WEATHER FORECAST</div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1 }}>28°C</div>
-              <div style={{ opacity: 0.9, marginBottom: '0.25rem' }}>Sunny Day</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.7, marginBottom: '1rem' }}>Dungarpur, Rajasthan</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+            <div
+              className="rounded-2xl p-4 sm:p-5 text-white shadow-md"
+              style={{
+                background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+              }}
+            >
+              <div className="text-[11px] font-bold opacity-80 mb-2 tracking-wider">
+                🌤 {isHindi ? 'मौसम पूर्वानुमान' : isPunjabi ? 'ਮੌਸਮ ਭਵਿੱਖਬਾਣੀ' : 'WEATHER FORECAST'}
+              </div>
+              <div className="text-3xl sm:text-4xl font-extrabold leading-tight">28°C</div>
+              <div className="text-sm opacity-90 mb-1">Sunny Day</div>
+              <div className="text-xs opacity-75 mb-3">Dungarpur, Rajasthan</div>
+              <div className="grid grid-cols-4 gap-2">
                 {weatherData.map((w, i) => {
                   const Icon = w.icon;
                   return (
-                    <div key={i} style={{ textAlign: 'center', background: 'rgba(255,255,255,0.15)', borderRadius: '10px', padding: '0.5rem 0.25rem' }}>
-                      <div style={{ fontSize: '0.65rem', opacity: 0.8 }}>{w.day}</div>
-                      <Icon style={{ width: '16px', height: '16px', margin: '0.25rem auto' }} />
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700 }}>{w.temp}</div>
+                    <div
+                      key={i}
+                      className="text-center bg-white/20 rounded-xl p-2"
+                    >
+                      <div className="text-[10px] opacity-80">{w.day}</div>
+                      <Icon className="w-4 h-4 mx-auto my-1" />
+                      <div className="text-xs font-bold">{w.temp}</div>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Crop Health */}
-            <div style={{ background: 'white', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <BarChart3 style={{ width: '16px', height: '16px', color: '#16a34a' }} />
-                <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#111827', margin: 0 }}>Crop Health Overview</h3>
+            {/* Crop Health Overview */}
+            <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100">
+              <div className="flex items-center gap-2 mb-3">
+                <BarChart3 className="w-4 h-4 text-green-600 shrink-0" />
+                <h3 className="text-sm font-bold text-gray-900">
+                  {isHindi ? 'फसल स्वास्थ्य स्कोर' : isPunjabi ? 'ਫ਼ਸਲ ਸਿਹਤ ਸਥਿਤੀ' : 'Crop Health Overview'}
+                </h3>
               </div>
               {[
-                { crop: 'Wheat', health: 87, color: '#22c55e' },
-                { crop: 'Rice', health: 72, color: '#f59e0b' },
-                { crop: 'Tomato', health: 58, color: '#ef4444' },
+                { crop: isHindi ? 'गेहूं (Wheat)' : isPunjabi ? 'ਕਣਕ (Wheat)' : 'Wheat', health: 87, color: '#22c55e' },
+                { crop: isHindi ? 'धान (Rice)' : isPunjabi ? 'ਝੋਨਾ (Rice)' : 'Rice', health: 72, color: '#f59e0b' },
+                { crop: isHindi ? 'टमाटर (Tomato)' : isPunjabi ? 'ਟਮਾਟਰ (Tomato)' : 'Tomato', health: 58, color: '#ef4444' },
               ].map((c, i) => (
-                <div key={i} style={{ marginBottom: '0.75rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#374151', fontWeight: 600 }}>{c.crop}</span>
-                    <span style={{ fontSize: '0.8rem', color: c.color, fontWeight: 700 }}>{c.health}%</span>
+                <div key={i} className="mb-3 last:mb-0">
+                  <div className="flex justify-between text-xs mb-1 font-semibold text-gray-700">
+                    <span>{c.crop}</span>
+                    <span style={{ color: c.color }}>{c.health}%</span>
                   </div>
-                  <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '9999px' }}>
-                    <div style={{ height: '100%', width: `${c.health}%`, background: c.color, borderRadius: '9999px', transition: 'width 0.5s ease' }} />
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${c.health}%`, backgroundColor: c.color }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Quick Tips */}
-            <div style={{
-              background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-              borderRadius: '20px', padding: '1.25rem',
-              border: '1px solid #fde68a'
-            }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#92400e', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>💡 TODAY'S FARM TIP</div>
-              <p style={{ fontSize: '0.85rem', color: '#78350f', lineHeight: 1.5, margin: 0 }}>
-                With rain expected Tuesday, consider harvesting your mature crops today and storing them in a dry place to prevent moisture damage.
+            {/* Farm Tip */}
+            <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200">
+              <div className="text-xs font-bold text-amber-900 mb-1.5 tracking-wider">
+                💡 {isHindi ? 'आज का कृषि सुझाव' : isPunjabi ? 'ਅੱਜ ਦਾ ਖੇਤੀ ਸੁਝਾਅ' : "TODAY'S FARM TIP"}
+              </div>
+              <p className="text-xs sm:text-sm text-amber-800 leading-relaxed">
+                {isHindi
+                  ? 'मौसम में नमी को देखते हुए पकी फसल की कटाई जल्द पूरी करें और अनाज को सुरक्षित स्थान पर रखें।'
+                  : isPunjabi
+                    ? 'ਮੌਸਮ ਦੇ ਹਿਸਾਬ ਨਾਲ ਪੱਕੀ ਹੋਈ ਫ਼ਸਲ ਦੀ ਵਾਢੀ ਸਮੇਂ ਸਿਰ ਕਰੋ ਅਤੇ ਅਨਾਜ ਨੂੰ ਸੁੱਕੀ ਥਾਂ ਤੇ ਸੰਭਾਲੋ।'
+                    : 'With rain expected Tuesday, consider harvesting your mature crops today and storing them in a dry place.'}
               </p>
             </div>
 
-            {/* Government Schemes */}
-            <div style={{ background: 'white', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <Star style={{ width: '16px', height: '16px', color: '#f59e0b' }} />
-                <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#111827', margin: 0 }}>Schemes for You</h3>
+            {/* Schemes for You */}
+            <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-100">
+              <div className="flex items-center gap-2 mb-3">
+                <Star className="w-4 h-4 text-amber-500 shrink-0" />
+                <h3 className="text-sm font-bold text-gray-900">
+                  {isHindi ? 'सरकारी योजनाएं' : isPunjabi ? 'ਸਰਕਾਰੀ ਸਕੀਮਾਂ' : 'Schemes for You'}
+                </h3>
               </div>
               {[
                 { name: 'PM-Kisan Samman', amount: '₹6,000/yr', color: '#16a34a' },
                 { name: 'Fasal Bima Yojana', amount: 'Coverage', color: '#3b82f6' },
               ].map((s, i) => (
-                <div key={i} style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '0.5rem', borderRadius: '10px', marginBottom: '0.5rem',
-                  background: '#f9fafb'
-                }}>
-                  <span style={{ fontSize: '0.8rem', color: '#374151', fontWeight: 500 }}>{s.name}</span>
-                  <span style={{ fontSize: '0.75rem', color: s.color, fontWeight: 700 }}>{s.amount}</span>
+                <div
+                  key={i}
+                  className="flex justify-between items-center p-2.5 rounded-xl mb-2 bg-slate-50 text-xs font-medium"
+                >
+                  <span className="text-gray-800">{s.name}</span>
+                  <span className="font-bold" style={{ color: s.color }}>{s.amount}</span>
                 </div>
               ))}
-              <button style={{
-                width: '100%', padding: '0.5rem', background: '#f0fdf4',
-                color: '#16a34a', border: '1px solid #bbf7d0',
-                borderRadius: '10px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
-                marginTop: '0.25rem'
-              }}>
-                View All Schemes →
+              <button className="w-full mt-1 py-2 bg-green-50 hover:bg-green-100 text-green-700 font-bold rounded-xl text-xs transition-colors cursor-pointer border border-green-200">
+                {isHindi ? 'सभी योजनाएं देखें →' : isPunjabi ? 'ਸਾਰੀਆਂ ਸਕੀਮਾਂ ਵੇਖੋ →' : 'View All Schemes →'}
               </button>
             </div>
+
           </div>
+
         </div>
+
       </div>
 
       {/* Modals */}
@@ -427,51 +424,22 @@ const FarmerDashboard: React.FC = () => {
       {activeModal === 'crop-scanning' && <CropScanningModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'transport' && <TransportModal onClose={() => setActiveModal(null)} />}
 
-      {/* Floating Bhoomi AI Assistant Button */}
-      <div style={{ position: 'fixed', bottom: '1.75rem', right: '1.75rem', zIndex: 40 }}>
+      {/* Floating Bhoomi AI Assistant Button (Compact on Mobile) */}
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
         <button
           id="bhoomi-ai-floating-btn"
           onClick={() => setIsBhoomiOpen(true)}
+          className="flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full text-white font-bold text-xs sm:text-sm shadow-xl cursor-pointer hover:scale-105 transition-all border border-white/40"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.65rem',
-            padding: '0.75rem 1.25rem',
-            borderRadius: '9999px',
             background: 'linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
-            color: '#ffffff',
-            border: '2px solid rgba(255, 255, 255, 0.4)',
-            boxShadow: '0 8px 24px rgba(22, 163, 74, 0.4), 0 2px 8px rgba(0,0,0,0.1)',
-            cursor: 'pointer',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            transition: 'all 0.25s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
-            e.currentTarget.style.boxShadow = '0 12px 28px rgba(22, 163, 74, 0.5), 0 4px 12px rgba(0,0,0,0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0) scale(1)';
-            e.currentTarget.style.boxShadow = '0 8px 24px rgba(22, 163, 74, 0.4), 0 2px 8px rgba(0,0,0,0.1)';
           }}
         >
-          <div style={{
-            width: '28px', height: '28px', borderRadius: '50%',
-            backgroundColor: '#ffffff',
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <Bot style={{ width: '18px', height: '18px', color: '#16a34a' }} />
+          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white flex items-center justify-center shrink-0">
+            <Bot className="w-4 h-4 text-green-700" />
           </div>
-          <span>Bhoomi AI</span>
-          <span style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.25)',
-            fontSize: '0.7rem',
-            fontWeight: 700,
-            padding: '0.15rem 0.5rem',
-            borderRadius: '9999px'
-          }}>
-            {language === 'hindi' ? 'भूमि AI' : 'Ask AI'}
+          <span className="hidden sm:inline">Bhoomi AI</span>
+          <span className="bg-white/20 text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold">
+            {isHindi ? 'भूमि AI' : isPunjabi ? 'ਭੂਮੀ AI' : 'Ask AI'}
           </span>
         </button>
       </div>

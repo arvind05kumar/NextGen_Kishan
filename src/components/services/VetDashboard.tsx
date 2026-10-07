@@ -96,57 +96,57 @@ const VetDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9BBE6' }}>
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-3 sm:p-6">
         {/* Header */}
-        <div className="mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border-l-4 border-purple-500">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
               Veterinary Dashboard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Welcome, {user?.name} - Manage your home visit requests
             </p>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
             <div className="flex items-center">
-              <div className="bg-yellow-100 p-3 rounded-full">
-                <Clock className="w-6 h-6 text-yellow-600" />
+              <div className="bg-yellow-100 p-2.5 sm:p-3 rounded-full">
+                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending Requests</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-3 sm:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Pending Requests</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   {vetRequests.filter(r => r.status === 'pending').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
             <div className="flex items-center">
-              <div className="bg-emerald-100 p-3 rounded-full">
-                <Stethoscope className="w-6 h-6 text-emerald-600" />
+              <div className="bg-emerald-100 p-2.5 sm:p-3 rounded-full">
+                <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Accepted</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-3 sm:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Accepted</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   {vetRequests.filter(r => r.status === 'accepted').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
             <div className="flex items-center">
-              <div className="bg-green-100 p-3 rounded-full">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="bg-green-100 p-2.5 sm:p-3 rounded-full">
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-3 sm:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Completed</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   {vetRequests.filter(r => r.status === 'completed').length}
                 </p>
               </div>
@@ -157,7 +157,7 @@ const VetDashboard: React.FC = () => {
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm mb-6">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
+            <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto no-scrollbar whitespace-nowrap">
               {[
                 { key: 'pending', label: 'Pending Requests', count: vetRequests.filter(r => r.status === 'pending').length },
                 { key: 'accepted', label: 'Accepted', count: vetRequests.filter(r => r.status === 'accepted').length },
@@ -166,7 +166,7 @@ const VetDashboard: React.FC = () => {
                 <button
                   key={tab.key}
                   onClick={() => setSelectedTab(tab.key as any)}
-                  className={`py-4 text-sm font-medium border-b-2 transition-colors ${selectedTab === tab.key
+                  className={`py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors shrink-0 ${selectedTab === tab.key
                     ? 'border-purple-500 text-purple-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
@@ -178,19 +178,19 @@ const VetDashboard: React.FC = () => {
           </div>
 
           {/* Request Cards */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {filteredRequests.length === 0 ? (
               <div className="text-center py-12">
                 <Stethoscope className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-500">No {selectedTab} requests found</p>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {filteredRequests.map((request) => (
-                  <div key={request.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
+                  <div key={request.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-3 mb-4">
                       <div>
-                        <div className="flex items-center space-x-3 mb-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
                           <span className="text-2xl">{getAnimalIcon(request.animalType)}</span>
                           <h3 className="text-lg font-semibold text-gray-900">
                             {request.farmerName}
@@ -264,8 +264,8 @@ const VetDashboard: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="flex justify-end space-x-3">
-                      <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                    <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3 pt-2">
+                      <button className="inline-flex items-center px-3 py-2 text-xs sm:text-sm font-medium text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
                         <Eye className="w-4 h-4 mr-1" />
                         View Details
                       </button>

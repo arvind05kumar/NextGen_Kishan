@@ -59,53 +59,53 @@ const TransportModal: React.FC<TransportModalProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-6 border-b">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50">
+      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b">
           <div className="flex items-center space-x-3">
             <div className="bg-orange-100 p-2 rounded-lg">
-              <Truck className="w-6 h-6 text-orange-600" />
+              <Truck className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Transport Services</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Transport Services</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Transport Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Transport Type</label>
-            <div className="grid grid-cols-2 gap-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Transport Type</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setTransportType('harvest')}
-                className={`p-4 rounded-lg border-2 text-left transition-colors ${
+                className={`p-3.5 sm:p-4 rounded-xl border-2 text-left transition-colors ${
                   transportType === 'harvest'
                     ? 'border-orange-500 bg-orange-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="text-2xl mb-2">🌾</div>
-                <div className="font-medium text-gray-900">Harvest Transport</div>
-                <div className="text-sm text-gray-500">Crops, grains, produce</div>
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">🌾</div>
+                <div className="font-semibold text-gray-900 text-sm sm:text-base">Harvest Transport</div>
+                <div className="text-xs sm:text-sm text-gray-500">Crops, grains, produce</div>
               </button>
               <button
                 type="button"
                 onClick={() => setTransportType('animal')}
-                className={`p-4 rounded-lg border-2 text-left transition-colors ${
+                className={`p-3.5 sm:p-4 rounded-xl border-2 text-left transition-colors ${
                   transportType === 'animal'
                     ? 'border-orange-500 bg-orange-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="text-2xl mb-2">🐄</div>
-                <div className="font-medium text-gray-900">Animal Transport</div>
-                <div className="text-sm text-gray-500">Livestock, cattle</div>
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">🐄</div>
+                <div className="font-semibold text-gray-900 text-sm sm:text-base">Animal Transport</div>
+                <div className="text-xs sm:text-sm text-gray-500">Livestock, cattle</div>
               </button>
             </div>
           </div>
@@ -244,18 +244,18 @@ const TransportModal: React.FC<TransportModalProps> = ({ onClose }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-3 sm:pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium order-2 sm:order-1"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!selectedDriver || !pickupDate || !destination || !description || submitting}
-              className="flex-1 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 transition-colors"
+              className="flex-1 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 transition-colors text-sm sm:text-base font-semibold order-1 sm:order-2"
             >
               {submitting ? (
                 <div className="flex items-center justify-center space-x-2">

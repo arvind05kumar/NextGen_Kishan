@@ -208,7 +208,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem',
+        padding: 'clamp(0.5rem, 2.5vw, 1rem)',
         backgroundColor: 'rgba(15, 23, 42, 0.65)',
         backdropFilter: 'blur(8px)',
         animation: 'fadeIn 0.2s ease-out',

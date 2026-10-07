@@ -153,7 +153,7 @@ const RoleSelection: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center py-10 px-4 flex flex-col justify-center"
+      className="min-h-screen bg-cover bg-center py-6 px-3 sm:py-10 sm:px-6 flex flex-col justify-center"
       style={{
         backgroundImage: `linear-gradient(rgba(240, 253, 244, 0.92), rgba(220, 252, 231, 0.92)), url(${leavesBg})`,
         backgroundAttachment: 'fixed'
@@ -162,25 +162,24 @@ const RoleSelection: React.FC = () => {
       <div className="max-w-6xl mx-auto w-full">
         
         {/* Header Branding */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center gap-2 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-green-200 shadow-sm mb-4">
+        <div className="text-center mb-6 sm:mb-10">
+          <div className="inline-flex items-center justify-center gap-2 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-green-200 shadow-sm mb-3 sm:mb-4">
             <Sparkles className="w-4 h-4 text-green-600" />
-            <span className="text-xs font-bold tracking-wider text-green-800 uppercase">
-              NextGen किसान • User Portals
+            <span className="text-[11px] sm:text-xs font-bold tracking-wider text-green-800 uppercase">
+              NextGen ਕਿਸਾਨ • User Portals
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-2 sm:mb-3">
             {headingText}
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+          <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium px-2">
             {subtitleText}
           </p>
         </div>
 
         {/* Symmetrical Tiles Grid Layout */}
-        {/* Row 1: 3 tiles (Farmer, Vet, Lab). Row 2: 2 tiles symmetrically centered (Driver, NGO) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-6">
           {rolesData.map((role, index) => {
             const IconComponent = role.icon;
             const roleName = isHindi ? role.nameHi : isRegional ? role.nameReg : role.nameEn;
@@ -211,7 +210,7 @@ const RoleSelection: React.FC = () => {
               >
                 <button
                   onClick={() => handleRoleSelect(role.id)}
-                  className="group relative w-full bg-white rounded-2xl border-2 border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 p-6 flex flex-col justify-between text-left overflow-hidden hover:-translate-y-2 cursor-pointer outline-none"
+                  className="group relative w-full bg-white rounded-2xl border-2 border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 p-4 sm:p-6 flex flex-col justify-between text-left overflow-hidden hover:-translate-y-2 cursor-pointer outline-none"
                   style={{
                     backgroundColor: '#ffffff',
                   }}

@@ -181,14 +181,14 @@ const NGODashboard: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem' }}>
+      <div className="max-w-[1200px] mx-auto p-3 sm:p-6">
         {/* Stats Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem', marginTop: '-1rem' }}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 -mt-4">
           {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
               <div key={i} style={{
-                background: 'white', borderRadius: '16px', padding: '1.1rem',
+                background: 'white', borderRadius: '16px', padding: '1rem',
                 boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
                 display: 'flex', alignItems: 'center', gap: '0.75rem',
                 transition: 'transform 0.2s'
@@ -200,31 +200,28 @@ const NGODashboard: React.FC = () => {
                   <Icon style={{ width: '18px', height: '18px', color: stat.color }} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{stat.value}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500 }}>{stat.label}</div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{stat.value}</div>
+                  <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500, marginTop: '0.2rem' }}>{stat.label}</div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.5rem', alignItems: 'start' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 items-start">
           {/* Main Content */}
           <div>
             <div style={{ background: 'white', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.07)', overflow: 'hidden' }}>
               {/* Tabs */}
-              <div style={{ borderBottom: '1px solid #f3f4f6', display: 'flex', padding: '0 1.5rem' }}>
+              <div className="border-b border-gray-100 flex px-3 sm:px-6 overflow-x-auto no-scrollbar whitespace-nowrap">
                 {tabs.map(tab => (
                   <button
                     key={tab.key}
                     onClick={() => setSelectedTab(tab.key as any)}
+                    className="py-3 sm:py-4 px-3 sm:px-4 text-xs sm:text-sm font-semibold border-none bg-none cursor-pointer flex items-center gap-1.5 shrink-0 transition-all"
                     style={{
-                      padding: '1rem 1.25rem', fontSize: '0.875rem', fontWeight: 600,
-                      border: 'none', background: 'none', cursor: 'pointer',
                       borderBottom: selectedTab === tab.key ? '3px solid #db2777' : '3px solid transparent',
                       color: selectedTab === tab.key ? '#db2777' : '#6b7280',
-                      display: 'flex', alignItems: 'center', gap: '0.4rem',
-                      transition: 'all 0.2s'
                     }}
                   >
                     <span>{tab.icon}</span>
@@ -242,7 +239,7 @@ const NGODashboard: React.FC = () => {
               </div>
 
               {/* Cards */}
-              <div style={{ padding: '1.5rem' }}>
+              <div className="p-3 sm:p-6">
                 {filteredRequests.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
                     <Heart style={{ width: '48px', height: '48px', margin: '0 auto 1rem', opacity: 0.4 }} />
