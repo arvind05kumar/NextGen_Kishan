@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
                 >
                   <option value="english">EN (English)</option>
                   <option value="hindi">HI (हिंदी)</option>
-                  <option value="regional">REG (Regional)</option>
+                  <option value="regional">ਪੰਜਾਬੀ (Punjabi)</option>
                 </select>
               </div>
 
