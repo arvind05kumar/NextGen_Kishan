@@ -28,3 +28,115 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* =========================================================================
+   Circle Entry & Green Transition Animations
+   ========================================================================= */
+
+@keyframes circlePop {
+  0% {
+    transform: scale(0.2) rotate(-8deg);
+    opacity: 0;
+    filter: drop-shadow(0 0 0px rgba(34, 197, 94, 0));
+  }
+  60% {
+    transform: scale(1.06) rotate(2deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px rgba(34, 197, 94, 0.7));
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px rgba(34, 197, 94, 0.45));
+  }
+}
+
+@keyframes pulseRings {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.92);
+    opacity: 0.85;
+  }
+}
+
+@keyframes rotateOrbitSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateOrbitReverse {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes greenWaveExpand {
+  0% {
+    transform: scale(0.1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(18);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(38);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(55);
+    opacity: 0.85;
+  }
+}
+
+@keyframes pageRevealIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+.animate-circle-pop {
+  animation: circlePop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-rings {
+  animation: pulseRings 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-rotate-orbit {
+  animation: rotateOrbitSlow 8s linear infinite;
+}
+
+.animate-rotate-orbit-reverse {
+  animation: rotateOrbitReverse 6s linear infinite;
+}
+
+.animate-green-wave {
+  animation: greenWaveExpand 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-page-reveal {
+  animation: pageRevealIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
