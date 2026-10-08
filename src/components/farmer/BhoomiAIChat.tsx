@@ -329,39 +329,41 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
   if (!isOpen) return null;
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 120,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'clamp(0.5rem, 2.5vw, 1rem)',
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
-        backdropFilter: 'blur(8px)',
-        animation: 'fadeIn 0.2s ease-out',
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          stopSpeaking();
-          onClose();
-        }
-      }}
-    >
+    <>
+      {/* Click-outside backdrop */}
       <div
         style={{
-          width: '100%',
-          maxWidth: '580px',
-          height: '670px',
-          maxHeight: '92vh',
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9998,
+          backgroundColor: 'rgba(15, 23, 42, 0.35)',
+          backdropFilter: 'blur(2px)',
+          animation: 'fadeIn 0.2s ease-out',
+        }}
+        onClick={() => {
+          stopSpeaking();
+          onClose();
+        }}
+      />
+
+      {/* Floating Bottom-Right Chat Window */}
+      <div
+        id="bhoomi-ai-chat-window"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 99999,
+          width: 'clamp(320px, 92vw, 440px)',
+          height: 'clamp(480px, 85vh, 660px)',
+          maxHeight: 'calc(100vh - 36px)',
           backgroundColor: '#ffffff',
           borderRadius: '24px',
-          boxShadow: '0 25px 60px -15px rgba(22, 163, 74, 0.35), 0 10px 30px rgba(0, 0, 0, 0.2)',
+          boxShadow: '0 25px 60px -15px rgba(22, 163, 74, 0.4), 0 10px 30px rgba(0, 0, 0, 0.25)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          border: '1px solid rgba(134, 239, 172, 0.5)',
+          border: '1.5px solid rgba(134, 239, 172, 0.8)',
           animation: 'slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
@@ -927,7 +929,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
