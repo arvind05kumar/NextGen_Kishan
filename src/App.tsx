@@ -12,9 +12,15 @@ import VetDashboard from './components/services/VetDashboard';
 import DriverDashboard from './components/services/DriverDashboard';
 import NGODashboard from './components/services/NGODashboard';
 
+import BhoomiAIChat from './components/farmer/BhoomiAIChat';
+import { Bot } from 'lucide-react';
+
 const AppContent: React.FC = () => {
-  const { currentStep } = useAuth();
+  const { currentStep, language } = useAuth();
   const [showIntro, setShowIntro] = useState(true);
+  const [isBhoomiOpen, setIsBhoomiOpen] = useState(false);
+
+  const isDashboard = currentStep.endsWith('-dashboard');
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -54,6 +60,47 @@ const AppContent: React.FC = () => {
         <Navbar />
         {renderCurrentStep()}
       </div>
+
+      {/* Global Floating Bhoomi AI Assistant Button (Fixed to Viewport Bottom-Right) */}
+      {isDashboard && (
+        <>
+          <div
+            style={{
+              position: 'fixed',
+              bottom: '24px',
+              right: '24px',
+              zIndex: 9990,
+              pointerEvents: 'auto',
+            }}
+          >
+            <button
+              id="bhoomi-ai-global-floating-btn"
+              type="button"
+              onClick={() => setIsBhoomiOpen(prev => !prev)}
+              className="flex items-center gap-2 px-4 py-3 rounded-full text-white font-bold text-xs sm:text-sm shadow-2xl cursor-pointer hover:scale-105 active:scale-95 transition-all border border-white/50"
+              style={{
+                background: 'linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
+                boxShadow: '0 8px 30px rgba(22, 163, 74, 0.45)',
+              }}
+              title="Bhoomi AI Digital Farming Assistant"
+            >
+              <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
+                <Bot className="w-4 h-4 text-green-700" />
+              </div>
+              <span className="hidden sm:inline">Bhoomi AI</span>
+              <span className="bg-white/20 text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold">
+                {language === 'hindi' ? 'भूमि AI' : language === 'regional' ? 'ਭੂਮੀ AI' : 'Ask AI'}
+              </span>
+            </button>
+          </div>
+
+          {/* Floating Bhoomi AI Chat Window */}
+          <BhoomiAIChat
+            isOpen={isBhoomiOpen}
+            onClose={() => setIsBhoomiOpen(false)}
+          />
+        </>
+      )}
     </>
   );
 };

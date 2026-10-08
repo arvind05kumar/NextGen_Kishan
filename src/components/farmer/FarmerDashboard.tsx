@@ -11,13 +11,11 @@ import SoilReportModal, { sampleSoilReports, SoilReportData } from './modals/Soi
 import VetServiceModal from './modals/VetServiceModal';
 import CropScanningModal from './modals/CropScanningModal';
 import TransportModal from './modals/TransportModal';
-import BhoomiAIChat from './BhoomiAIChat';
 
 const FarmerDashboard: React.FC = () => {
   const { user, language } = useAuth();
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [viewingSoilReport, setViewingSoilReport] = useState<SoilReportData | null>(null);
-  const [isBhoomiOpen, setIsBhoomiOpen] = useState(false);
 
   const isHindi = language === 'hindi';
   const isPunjabi = language === 'regional';
@@ -582,32 +580,6 @@ const FarmerDashboard: React.FC = () => {
       {activeModal === 'vet-service' && <VetServiceModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'crop-scanning' && <CropScanningModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'transport' && <TransportModal onClose={() => setActiveModal(null)} />}
-
-      {/* Floating Bhoomi AI Assistant Button (Compact on Mobile) */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
-        <button
-          id="bhoomi-ai-floating-btn"
-          onClick={() => setIsBhoomiOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full text-white font-bold text-xs sm:text-sm shadow-xl cursor-pointer hover:scale-105 transition-all border border-white/40"
-          style={{
-            background: 'linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
-          }}
-        >
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white flex items-center justify-center shrink-0">
-            <Bot className="w-4 h-4 text-green-700" />
-          </div>
-          <span className="hidden sm:inline">Bhoomi AI</span>
-          <span className="bg-white/20 text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold">
-            {isHindi ? 'भूमि AI' : isPunjabi ? 'ਭੂਮੀ AI' : 'Ask AI'}
-          </span>
-        </button>
-      </div>
-
-      {/* Bhoomi AI Chat Modal */}
-      <BhoomiAIChat
-        isOpen={isBhoomiOpen}
-        onClose={() => setIsBhoomiOpen(false)}
-      />
     </div>
   );
 };
