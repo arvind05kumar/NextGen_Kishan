@@ -93,9 +93,9 @@ const LabDashboard: React.FC = () => {
   };
 
   const stats = [
-    { label: 'Pending', value: testRequests.filter(r => r.status === 'pending').length, icon: Clock, color: '#f59e0b', bg: '#fef3c7' },
-    { label: 'In Progress', value: testRequests.filter(r => r.status === 'in-progress').length, icon: Microscope, color: '#10b981', bg: '#d1fae5' },
-    { label: 'Completed', value: testRequests.filter(r => r.status === 'completed').length, icon: CheckCircle, color: '#22c55e', bg: '#dcfce7' },
+    { label: 'Pending', value: testRequests.filter(r => r.status === 'pending').length, icon: Clock, color: '#f59e0b', bg: '#fef3c7', tabKey: 'pending' as const },
+    { label: 'In Progress', value: testRequests.filter(r => r.status === 'in-progress').length, icon: Microscope, color: '#10b981', bg: '#d1fae5', tabKey: 'in-progress' as const },
+    { label: 'Completed', value: testRequests.filter(r => r.status === 'completed').length, icon: CheckCircle, color: '#22c55e', bg: '#dcfce7', tabKey: 'completed' as const },
     { label: 'This Month', value: '24', icon: TrendingUp, color: '#3b82f6', bg: '#dbeafe' },
   ];
 
@@ -169,22 +169,46 @@ const LabDashboard: React.FC = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem', marginTop: '-1rem' }}>
           {stats.map((stat, i) => {
             const Icon = stat.icon;
+            const tabKey = (stat as any).tabKey;
+            const isSelected = tabKey && selectedTab === tabKey;
             return (
-              <div key={i} style={{
-                background: 'white', borderRadius: '16px', padding: '1.1rem',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-                display: 'flex', alignItems: 'center', gap: '0.75rem',
-                transition: 'transform 0.2s', cursor: 'default'
-              }}
-                onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+              <div
+                key={i}
+                role={tabKey ? 'button' : undefined}
+                tabIndex={tabKey ? 0 : undefined}
+                onClick={() => {
+                  if (tabKey) {
+                    setSelectedTab(tabKey);
+                    document.getElementById('lab-requests-tabs')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                style={{
+                  background: 'white', borderRadius: '16px', padding: '1.1rem',
+                  boxShadow: isSelected ? '0 8px 28px rgba(16,185,129,0.25)' : '0 4px 24px rgba(0,0,0,0.08)',
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  transition: 'all 0.2s',
+                  cursor: tabKey ? 'pointer' : 'default',
+                  border: isSelected ? '2px solid #10b981' : '2px solid transparent',
+                  outline: 'none'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  if (tabKey && !isSelected) e.currentTarget.style.borderColor = '#a7f3d0';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  if (tabKey && !isSelected) e.currentTarget.style.borderColor = 'transparent';
+                }}
               >
                 <div style={{ background: stat.bg, borderRadius: '10px', padding: '0.5rem', flexShrink: 0 }}>
                   <Icon style={{ width: '18px', height: '18px', color: stat.color }} />
                 </div>
-                <div>
+                <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{stat.value}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500 }}>{stat.label}</div>
+                  <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{stat.label}</span>
+                    {tabKey && <span style={{ fontSize: '0.65rem', color: '#10b981', fontWeight: 600 }}>Tab →</span>}
+                  </div>
                 </div>
               </div>
             );
@@ -194,7 +218,7 @@ const LabDashboard: React.FC = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.5rem', alignItems: 'start' }}>
           {/* Main */}
           <div>
-            <div style={{ background: 'white', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.07)', overflow: 'hidden' }}>
+            <div id="lab-requests-tabs" style={{ background: 'white', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.07)', overflow: 'hidden', scrollMarginTop: '80px' }}>
               {/* Tabs */}
               <div style={{ borderBottom: '1px solid #f3f4f6', display: 'flex', padding: '0 1.5rem' }}>
                 {tabs.map(tab => (

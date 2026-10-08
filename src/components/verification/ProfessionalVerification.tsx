@@ -5,7 +5,7 @@ import { Camera, FileText, CheckCircle, Award, Globe, ArrowLeft } from 'lucide-r
 const profTexts = {
   english: {
     title: 'Professional Verification',
-    backToRoles: '← Change Role / Back',
+    backToRoles: 'Change Role / Back',
     scanningTitle: 'Scanning Document...',
     scanningHint: 'Please hold your document steady in front of the camera',
     scanAction: 'Start Scanning',
@@ -24,7 +24,7 @@ const profTexts = {
   },
   hindi: {
     title: 'व्यावसायिक सत्यापन',
-    backToRoles: '← भूमिका बदलें / वापस जाएं',
+    backToRoles: 'भूमिका बदलें / वापस जाएं',
     scanningTitle: 'दस्तावेज़ स्कैन किया जा रहा है...',
     scanningHint: 'कृपया अपना दस्तावेज़ कैमरे के सामने स्थिर रखें',
     scanAction: 'स्कैनिंग शुरू करें',
@@ -43,7 +43,7 @@ const profTexts = {
   },
   regional: {
     title: 'ਪੇਸ਼ੇਵਰ ਤਸਦੀਕ',
-    backToRoles: '← ਭੂਮਿਕਾ ਬਦਲੋ / ਵਾਪਸ ਜਾਓ',
+    backToRoles: 'ਭੂਮਿਕਾ ਬਦਲੋ / ਵਾਪਸ ਜਾਓ',
     scanningTitle: 'ਦਸਤਾਵੇਜ਼ ਸਕੈਨ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...',
     scanningHint: 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਦਸਤਾਵੇਜ਼ ਕੈਮਰੇ ਸਾਹਮਣੇ ਸਥਿਰ ਰੱਖੋ',
     scanAction: 'ਸਕੈਨਿੰਗ ਸ਼ੁਰੂ ਕਰੋ',

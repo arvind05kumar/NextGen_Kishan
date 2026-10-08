@@ -111,51 +111,99 @@ const VetDashboard: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedTab('pending');
+              document.getElementById('vet-requests-tabs')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`bg-white rounded-xl p-4 sm:p-6 text-left transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-1 border-2 ${
+              selectedTab === 'pending'
+                ? 'border-yellow-500 shadow-md ring-2 ring-yellow-200'
+                : 'border-transparent shadow-sm hover:border-yellow-200'
+            }`}
+          >
             <div className="flex items-center">
-              <div className="bg-yellow-100 p-2.5 sm:p-3 rounded-full">
+              <div className="bg-yellow-100 p-2.5 sm:p-3 rounded-full shrink-0">
                 <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
               </div>
-              <div className="ml-3 sm:ml-4">
+              <div className="ml-3 sm:ml-4 flex-1">
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Pending Requests</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {vetRequests.filter(r => r.status === 'pending').length}
-                </p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                    {vetRequests.filter(r => r.status === 'pending').length}
+                  </p>
+                  <span className="text-[11px] font-semibold text-yellow-600 hover:underline">
+                    View Tab →
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedTab('accepted');
+              document.getElementById('vet-requests-tabs')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`bg-white rounded-xl p-4 sm:p-6 text-left transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-1 border-2 ${
+              selectedTab === 'accepted'
+                ? 'border-emerald-500 shadow-md ring-2 ring-emerald-200'
+                : 'border-transparent shadow-sm hover:border-emerald-200'
+            }`}
+          >
             <div className="flex items-center">
-              <div className="bg-emerald-100 p-2.5 sm:p-3 rounded-full">
+              <div className="bg-emerald-100 p-2.5 sm:p-3 rounded-full shrink-0">
                 <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
               </div>
-              <div className="ml-3 sm:ml-4">
+              <div className="ml-3 sm:ml-4 flex-1">
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Accepted</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {vetRequests.filter(r => r.status === 'accepted').length}
-                </p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                    {vetRequests.filter(r => r.status === 'accepted').length}
+                  </p>
+                  <span className="text-[11px] font-semibold text-emerald-600 hover:underline">
+                    View Tab →
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedTab('completed');
+              document.getElementById('vet-requests-tabs')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`bg-white rounded-xl p-4 sm:p-6 text-left transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-1 border-2 ${
+              selectedTab === 'completed'
+                ? 'border-green-500 shadow-md ring-2 ring-green-200'
+                : 'border-transparent shadow-sm hover:border-green-200'
+            }`}
+          >
             <div className="flex items-center">
-              <div className="bg-green-100 p-2.5 sm:p-3 rounded-full">
+              <div className="bg-green-100 p-2.5 sm:p-3 rounded-full shrink-0">
                 <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
-              <div className="ml-3 sm:ml-4">
+              <div className="ml-3 sm:ml-4 flex-1">
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Completed</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {vetRequests.filter(r => r.status === 'completed').length}
-                </p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                    {vetRequests.filter(r => r.status === 'completed').length}
+                  </p>
+                  <span className="text-[11px] font-semibold text-green-600 hover:underline">
+                    View Tab →
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-sm mb-6">
+        <div id="vet-requests-tabs" className="bg-white rounded-xl shadow-sm mb-6 scroll-mt-20">
           <div className="border-b border-gray-200">
             <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto no-scrollbar whitespace-nowrap">
               {[

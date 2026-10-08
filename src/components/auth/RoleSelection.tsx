@@ -145,10 +145,10 @@ const RoleSelection: React.FC = () => {
       : 'Choose how you want to use the NextGen Kisan platform';
 
   const backText = isHindi
-    ? '← लॉगिन पर वापस जाएं'
+    ? 'लॉगिन पर वापस जाएं'
     : isRegional
-      ? '← ਵਾਪਸ ਲੌਗਇਨ ਤੇ ਜਾਓ'
-      : '← Back to login';
+      ? 'ਵਾਪਸ ਲੌਗਇਨ ਤੇ ਜਾਓ'
+      : 'Back to login';
 
   return (
     <div
