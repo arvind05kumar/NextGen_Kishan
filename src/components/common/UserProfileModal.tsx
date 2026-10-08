@@ -82,8 +82,14 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
     : `XXXX-XXXX-9481`;
 
   // Dynamic names & locations based on selected language
-  const isEnglish = language === 'english';
-  const displayName = user.name || (user.role === 'farmer' ? t.defaultFarmerName : t.defaultVetName);
+  const defaultRoleNames: Record<string, string> = {
+    farmer: t.defaultFarmerName,
+    vet: t.defaultVetName,
+    driver: (t as any).defaultDriverName || 'Rampal',
+    ngo: (t as any).defaultNgoName || 'Anjali Sharma',
+    lab: 'Dr. S. K. Rathore'
+  };
+  const displayName = user.name || defaultRoleNames[user.role] || t.defaultFarmerName;
   const displayLocation = user.location || user.aadhaarDetails?.address || t.defaultLocation;
   const displayPhone = user.phone ? `+91 ${user.phone}` : '+91 98765 43210';
 

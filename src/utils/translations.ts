@@ -81,7 +81,9 @@ export const translations: Record<Language, Translations> = {
 
     profileTitle: 'Profile',
     defaultFarmerName: 'Rajesh Kumar',
-    defaultVetName: 'Dr. Arvind Singh',
+    defaultVetName: 'Dr. Priya Sharma',
+    defaultDriverName: 'Rampal',
+    defaultNgoName: 'Anjali Sharma (Gramin Seva Trust)',
     defaultLocation: 'Village: Rampura, Tehsil: Chaksu, Dist: Jaipur, Rajasthan',
     phoneLabel: 'Phone Number',
     aadhaarLabel: 'Aadhaar Card No.',
@@ -132,7 +134,9 @@ export const translations: Record<Language, Translations> = {
 
     profileTitle: 'प्रोफाइल',
     defaultFarmerName: 'राजेश कुमार',
-    defaultVetName: 'डॉ. अरविंद सिंह',
+    defaultVetName: 'डॉ. प्रिया शर्मा',
+    defaultDriverName: 'रामपाल',
+    defaultNgoName: 'अंजलि शर्मा (ग्रामीण सेवा ट्रस्ट)',
     defaultLocation: 'गाँव: रामपुरा, तहसील: चाकसू, जिला: जयपुर, राजस्थान',
     phoneLabel: 'मोबाइल नंबर',
     aadhaarLabel: 'आधार कार्ड संख्या',
@@ -183,7 +187,9 @@ export const translations: Record<Language, Translations> = {
 
     profileTitle: 'ਪ੍ਰੋਫਾਈਲ',
     defaultFarmerName: 'ਗੁਰਪ੍ਰੀਤ ਸਿੰਘ',
-    defaultVetName: 'ਡਾ. ਹਰਜੀਤ ਸਿੰਘ',
+    defaultVetName: 'ਡਾ. ਪ੍ਰਿਆ ਸ਼ਰਮਾ',
+    defaultDriverName: 'ਰਾਮਪਾਲ',
+    defaultNgoName: 'ਅੰਜਲੀ ਸ਼ਰਮਾ (ਗ੍ਰਾਮੀਣ ਸੇਵਾ ਟਰੱਸਟ)',
     defaultLocation: 'ਪਿੰਡ: ਜੰਡਿਆਲਾ, ਤਹਿਸੀਲ: ਨਕੋਦਰ, ਜ਼ਿਲ੍ਹਾ: ਜਲੰਧਰ, ਪੰਜਾਬ',
     phoneLabel: 'ਫ਼ੋਨ ਨੰਬਰ',
     aadhaarLabel: 'ਆਧਾਰ ਨੰਬਰ',

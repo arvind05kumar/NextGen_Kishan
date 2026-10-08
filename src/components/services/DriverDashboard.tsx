@@ -153,7 +153,7 @@ const DriverDashboard: React.FC = () => {
                 <span style={{ color: '#fed7aa', fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.05em' }}>DRIVER PORTAL</span>
               </div>
               <h1 style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.2 }}>
-                Welcome, {user?.name || 'Driver'} 🚛
+                Welcome, {user?.name || 'Rampal'} 🚛
               </h1>
               <p style={{ color: '#fed7aa', fontSize: '1rem', marginBottom: '1rem' }}>
                 🚗 Certified Transport Driver • Agricultural Logistics
@@ -465,7 +465,7 @@ const DriverDashboard: React.FC = () => {
                   <User style={{ width: '24px', height: '24px' }} />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700 }}>{user?.name}</div>
+                  <div style={{ fontWeight: 700 }}>{user?.name || 'Rampal'}</div>
                   <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>Transport Driver</div>
                 </div>
               </div>

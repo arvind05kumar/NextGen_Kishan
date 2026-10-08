@@ -155,7 +155,7 @@ const NGODashboard: React.FC = () => {
                 <span style={{ color: '#fbcfe8', fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.05em' }}>NGO SUPPORT PORTAL</span>
               </div>
               <h1 style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.2 }}>
-                Welcome, {user?.name || 'NGO Worker'} 🤝
+                Welcome, {user?.name || 'Anjali Sharma'} 🤝
               </h1>
               <p style={{ color: '#fbcfe8', fontSize: '1rem', marginBottom: '1rem' }}>
                 💖 Community Impact Worker • Farmer Welfare Specialist
@@ -464,7 +464,7 @@ const NGODashboard: React.FC = () => {
                   <User style={{ width: '24px', height: '24px' }} />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700 }}>{user?.name}</div>
+                  <div style={{ fontWeight: 700 }}>{user?.name || 'Anjali Sharma'}</div>
                   <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>NGO Field Worker</div>
                 </div>
               </div>

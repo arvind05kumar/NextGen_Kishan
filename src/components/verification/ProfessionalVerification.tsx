@@ -77,15 +77,44 @@ const ProfessionalVerification: React.FC = () => {
   const roleKey = (user?.role && user.role in t.roles) ? (user.role as keyof typeof t.roles) : 'vet';
   const roleConfig = t.roles[roleKey];
 
+  const getRoleDefaultName = () => {
+    const roleNames: Record<string, { english: string; hindi: string; regional: string }> = {
+      driver: {
+        english: 'Rampal',
+        hindi: 'रामपाल',
+        regional: 'ਰਾਮਪਾਲ'
+      },
+      ngo: {
+        english: 'Anjali Sharma',
+        hindi: 'अंजलि शर्मा',
+        regional: 'ਅੰਜਲੀ ਸ਼ਰਮਾ'
+      },
+      vet: {
+        english: 'Dr. Priya Sharma',
+        hindi: 'डॉ. प्रिया शर्मा',
+        regional: 'ਡਾ. ਪ੍ਰਿਆ ਸ਼ਰਮਾ'
+      },
+      lab: {
+        english: 'Dr. S. K. Rathore',
+        hindi: 'डॉ. एस. के. राठौड़',
+        regional: 'ਡਾ. ਐੱਸ. ਕੇ. ਰਾਠੌਰ'
+      }
+    };
+    const roleConfigName = roleNames[user?.role || 'vet'] || roleNames.vet;
+    return roleConfigName[currentLang as 'english' | 'hindi' | 'regional'] || roleConfigName.english;
+  };
+
   const handleScanDocument = async () => {
     setScanning(true);
     
     // Simulate scanning process
     await new Promise(resolve => setTimeout(resolve, 2500));
     
+    const roleName = getRoleDefaultName();
+    
     // Mock professional data based on role
     const mockData = {
-      name: currentLang === 'hindi' ? 'डॉ. अरविंद सिंह' : currentLang === 'regional' ? 'ਡਾ. ਹਰਜੀਤ ਸਿੰਘ' : 'Dr. Arvind Singh',
+      name: roleName,
       license: `${user?.role?.toUpperCase()}123456789`,
       specialization: roleConfig.defaultSpec
     };
@@ -97,10 +126,11 @@ const ProfessionalVerification: React.FC = () => {
 
   const handleVerificationComplete = () => {
     if (user) {
+      const defaultName = getRoleDefaultName();
       setUser({
         ...user,
         verified: true,
-        name: professionalDetails.name || (currentLang === 'hindi' ? 'डॉ. अरविंद सिंह' : currentLang === 'regional' ? 'ਡਾ. ਹਰਜੀਤ ਸਿੰਘ' : 'Dr. Arvind Singh'),
+        name: professionalDetails.name || defaultName,
         professionalDetails
       });
       setCurrentStep(`${user.role}-dashboard`);

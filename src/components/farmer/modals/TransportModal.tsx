@@ -16,7 +16,7 @@ const TransportModal: React.FC<TransportModalProps> = ({ onClose }) => {
   const drivers = [
     {
       id: 'driver1',
-      name: 'Ravi Sharma',
+      name: 'Rampal (रामपाल)',
       vehicle: 'Tata 407 (2 Ton)',
       rating: 4.8,
       experience: '5 years',
