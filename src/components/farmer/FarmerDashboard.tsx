@@ -7,6 +7,7 @@ import {
   Bot
 } from 'lucide-react';
 import SoilCropTestModal from './modals/SoilCropTestModal';
+import SoilReportModal, { sampleSoilReports, SoilReportData } from './modals/SoilReportModal';
 import VetServiceModal from './modals/VetServiceModal';
 import CropScanningModal from './modals/CropScanningModal';
 import TransportModal from './modals/TransportModal';
@@ -15,6 +16,7 @@ import BhoomiAIChat from './BhoomiAIChat';
 const FarmerDashboard: React.FC = () => {
   const { user, language } = useAuth();
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [viewingSoilReport, setViewingSoilReport] = useState<SoilReportData | null>(null);
   const [isBhoomiOpen, setIsBhoomiOpen] = useState(false);
 
   const isHindi = language === 'hindi';
@@ -261,13 +263,99 @@ const FarmerDashboard: React.FC = () => {
               </div>
             </div>
 
+            {/* Dedicated Soil Health Cards & PDF Reports Section */}
+            <div className="bg-gradient-to-br from-emerald-900 via-green-800 to-emerald-950 rounded-2xl p-5 sm:p-6 text-white shadow-lg relative overflow-hidden">
+              <div className="absolute -right-8 -bottom-8 w-44 h-44 rounded-full bg-white/5 pointer-events-none" />
+
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 relative z-10">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-white/15 border border-white/20">
+                    <TestTube2 className="w-5 h-5 text-emerald-300" />
+                  </div>
+                  <div>
+                    <h2 className="text-base sm:text-lg font-bold flex items-center gap-2">
+                      <span>{isHindi ? 'मृदा स्वास्थ्य कार्ड एवं PDF रिपोर्ट' : isPunjabi ? 'ਮਿੱਟੀ ਸਿਹਤ ਕਾਰਡ ਅਤੇ PDF ਰਿਪੋਰਟ' : 'Soil Health Cards & PDF Reports'}</span>
+                      <span className="bg-emerald-400/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                        NABL CERTIFIED
+                      </span>
+                    </h2>
+                    <p className="text-xs text-emerald-200">
+                      {isHindi ? 'खेत की पोषक स्थिति जानें और आधिकारिक लैब PDF रिपोर्ट डाउनलोड करें' : isPunjabi ? 'ਖੇਤ ਦੀ ਪੋਸ਼ਕ ਸਥਿਤੀ ਜਾਣੋ ਅਤੇ ਅਧਿਕਾਰਤ ਲੈਬ PDF ਰਿਪੋਰਟ ਡਾਊਨਲੋਡ ਕਰੋ' : 'Check soil nutrient health and download official lab PDF reports'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={() => setActiveModal('soil-crop-test')}
+                    className="flex-1 sm:flex-initial text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-2 rounded-xl transition-all shadow-sm cursor-pointer"
+                  >
+                    + {isHindi ? 'नई जांच बुक करें' : isPunjabi ? 'ਨਵੀਂ ਜਾਂਚ ਬੁੱਕ ਕਰੋ' : 'Book Soil Test'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Ready Soil Report Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 relative z-10">
+                {sampleSoilReports.map((rep) => (
+                  <div
+                    key={rep.id}
+                    className="bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl p-4 backdrop-blur-md transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="bg-emerald-300/20 border border-emerald-300/40 text-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                          {rep.cropPlanned}
+                        </span>
+                        <span className="text-[11px] text-emerald-300 font-mono">
+                          ID: {rep.sampleNo.split('-').slice(-2).join('-')}
+                        </span>
+                      </div>
+
+                      <div className="font-bold text-white text-sm mb-1">{rep.khasraNo}</div>
+                      <div className="text-xs text-emerald-100 flex items-center justify-between mb-3">
+                        <span>Score: <strong className="text-emerald-300">{rep.overallScore}/100</strong> ({rep.overallHealth})</span>
+                        <span className="text-[11px] opacity-80">{rep.testingDate}</span>
+                      </div>
+
+                      {/* Nutrient Micro Badges */}
+                      <div className="flex flex-wrap gap-1.5 mb-3 text-[10px]">
+                        <span className="bg-red-400/25 text-red-200 border border-red-400/40 px-1.5 py-0.5 rounded font-semibold">N: Low</span>
+                        <span className="bg-amber-400/25 text-amber-200 border border-amber-400/40 px-1.5 py-0.5 rounded font-semibold">P: Med</span>
+                        <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">K: High</span>
+                        <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">pH: 7.4 OK</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 pt-2 border-t border-white/15">
+                      <button
+                        onClick={() => setViewingSoilReport(rep)}
+                        className="flex-1 bg-white hover:bg-emerald-50 text-emerald-950 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                      >
+                        <span>📄 {isHindi ? 'रिपोर्ट देखें' : isPunjabi ? 'ਰਿਪੋਰਟ ਵੇਖੋ' : 'View Report'}</span>
+                      </button>
+                      <button
+                        onClick={() => setViewingSoilReport(rep)}
+                        className="flex-1 bg-emerald-500/80 hover:bg-emerald-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                      >
+                        <span>📥 {isHindi ? 'PDF डाउनलोड' : isPunjabi ? 'PDF ਡਾਊਨਲੋਡ' : 'Download PDF'}</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Recent Activity Card */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-100">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-base sm:text-lg font-bold text-gray-900">
                   {isHindi ? 'हालिया गतिविधियां' : isPunjabi ? 'ਤਾਜ਼ਾ ਗਤੀਵਿਧੀਆਂ' : 'Recent Activity'}
                 </h2>
-                <button className="text-green-600 text-xs sm:text-sm font-semibold hover:underline cursor-pointer">
+                <button
+                  onClick={() => setActiveModal('soil-crop-test')}
+                  className="text-green-600 text-xs sm:text-sm font-semibold hover:underline cursor-pointer"
+                >
                   {isHindi ? 'सभी देखें →' : isPunjabi ? 'ਸਭ ਵੇਖੋ →' : 'View All →'}
                 </button>
               </div>
@@ -276,7 +364,14 @@ const FarmerDashboard: React.FC = () => {
                 {recentActivity.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-slate-50 hover:bg-green-50/50 border border-slate-100 transition-colors"
+                    onClick={() => {
+                      if (item.title.toLowerCase().includes('soil')) {
+                        setViewingSoilReport(sampleSoilReports[0]);
+                      }
+                    }}
+                    className={`flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-slate-50 hover:bg-green-50/50 border border-slate-100 transition-colors ${
+                      item.title.toLowerCase().includes('soil') ? 'cursor-pointer hover:border-green-300' : ''
+                    }`}
                   >
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -285,8 +380,13 @@ const FarmerDashboard: React.FC = () => {
                       {item.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-gray-900 text-xs sm:text-sm truncate">
-                        {item.title}
+                      <div className="font-bold text-gray-900 text-xs sm:text-sm truncate flex items-center gap-2">
+                        <span>{item.title}</span>
+                        {item.title.toLowerCase().includes('soil') && (
+                          <span className="text-[10px] text-emerald-600 font-semibold underline">
+                            ({isHindi ? 'क्लिक करके PDF देखें' : 'Click to view PDF'})
+                          </span>
+                        )}
                       </div>
                       <div className="text-gray-500 text-[11px] sm:text-xs truncate">
                         {item.desc}
@@ -420,6 +520,12 @@ const FarmerDashboard: React.FC = () => {
 
       {/* Modals */}
       {activeModal === 'soil-crop-test' && <SoilCropTestModal onClose={() => setActiveModal(null)} />}
+      {viewingSoilReport && (
+        <SoilReportModal
+          report={viewingSoilReport}
+          onClose={() => setViewingSoilReport(null)}
+        />
+      )}
       {activeModal === 'vet-service' && <VetServiceModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'crop-scanning' && <CropScanningModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'transport' && <TransportModal onClose={() => setActiveModal(null)} />}
