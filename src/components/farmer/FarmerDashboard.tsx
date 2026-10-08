@@ -81,17 +81,49 @@ const FarmerDashboard: React.FC = () => {
   ];
 
   const recentActivity = [
-    { icon: '🧪', title: 'Soil Test Report Ready', desc: 'Lab has uploaded your report for Field A', time: '2 hours ago', color: '#22c55e', status: 'new' },
-    { icon: '🐄', title: 'Vet Visit Scheduled', desc: 'Dr. Priya will visit on Jan 16, Morning', time: '1 day ago', color: '#a855f7', status: 'pending' },
-    { icon: '🌾', title: 'Crop Scan Analyzed', desc: 'Minor fungal infection detected in Wheat crop', time: '3 days ago', color: '#f97316', status: 'warning' },
-    { icon: '🚛', title: 'Transport Delivered', desc: '15 quintals wheat delivered to Dungarpur Market', time: '1 week ago', color: '#3b82f6', status: 'done' },
+    {
+      icon: '🧪',
+      title: isHindi ? 'मृदा परीक्षण रिपोर्ट तैयार' : isPunjabi ? 'ਮਿੱਟੀ ਪਰਖ ਰਿਪੋਰਟ ਤਿਆਰ' : 'Soil Test Report Ready',
+      desc: isHindi ? 'प्रयोगशाला ने खेत A की रिपोर्ट अपलोड की है' : isPunjabi ? 'ਲੈਬ ਨੇ ਖੇਤ A ਦੀ ਰਿਪੋਰਟ ਅਪਲੋਡ ਕਰ ਦਿੱਤੀ ਹੈ' : 'Lab has uploaded your report for Field A',
+      time: isHindi ? '2 घंटे पहले' : isPunjabi ? '2 ਘੰਟੇ ਪਹਿਲਾਂ' : '2 hours ago',
+      color: '#22c55e',
+      status: 'new',
+      type: 'soil'
+    },
+    {
+      icon: '🐄',
+      title: isHindi ? 'पशु चिकित्सक विजिट निर्धारित' : isPunjabi ? 'ਪਸ਼ੂ ਡਾਕਟਰ ਫੇਰੀ ਤੈਅ' : 'Vet Visit Scheduled',
+      desc: isHindi ? 'डॉ. प्रिया 16 जनवरी को विजिट करेंगी' : isPunjabi ? 'ਡਾ. ਪ੍ਰਿਆ 16 ਜਨਵਰੀ ਨੂੰ ਆਉਣਗੇ' : 'Dr. Priya will visit on Jan 16, Morning',
+      time: isHindi ? '1 दिन पहले' : isPunjabi ? '1 ਦਿਨ ਪਹਿਲਾਂ' : '1 day ago',
+      color: '#a855f7',
+      status: 'pending',
+      type: 'vet'
+    },
+    {
+      icon: '🌾',
+      title: isHindi ? 'फसल स्कैन विश्लेषण' : isPunjabi ? 'ਫ਼ਸਲ ਸਕੈਨ ਵਿਸ਼ਲੇਸ਼ਣ' : 'Crop Scan Analyzed',
+      desc: isHindi ? 'गेहूं में हल्का फफूंद संक्रमण पाया गया' : isPunjabi ? 'ਕਣਕ ਵਿੱਚ ਉੱਲੀ ਦਾ ਹਲਕਾ ਅਸਰ' : 'Minor fungal infection detected in Wheat crop',
+      time: isHindi ? '3 दिन पहले' : isPunjabi ? '3 ਦਿਨ ਪਹਿਲਾਂ' : '3 days ago',
+      color: '#f97316',
+      status: 'warning',
+      type: 'crop'
+    },
+    {
+      icon: '🚛',
+      title: isHindi ? 'परिवहन पूरा हुआ' : isPunjabi ? 'ਢੋਆ-ਢੁਆਈ ਮੁਕੰਮਲ' : 'Transport Delivered',
+      desc: isHindi ? '15 क्विंटल गेहूं डूंगरपुर मंडी पहुंचाया गया' : isPunjabi ? '15 ਕੁਇੰਟਲ ਕਣਕ ਮੰਡੀ ਪਹੁੰਚਾਈ ਗਈ' : '15 quintals wheat delivered to Dungarpur Market',
+      time: isHindi ? '1 सप्ताह पहले' : isPunjabi ? '1 ਹਫ਼ਤਾ ਪਹਿਲਾਂ' : '1 week ago',
+      color: '#3b82f6',
+      status: 'done',
+      type: 'transport'
+    },
   ];
 
   const weatherData = [
-    { day: 'Today', icon: Sun, temp: '28°C', condition: 'Sunny' },
-    { day: 'Tue', icon: CloudRain, temp: '24°C', condition: 'Rain' },
-    { day: 'Wed', icon: Wind, temp: '26°C', condition: 'Windy' },
-    { day: 'Thu', icon: Sun, temp: '30°C', condition: 'Sunny' },
+    { day: isHindi ? 'आज' : isPunjabi ? 'ਅੱਜ' : 'Today', icon: Sun, temp: '28°C', condition: 'Sunny' },
+    { day: isHindi ? 'मंगल' : isPunjabi ? 'ਮੰਗਲ' : 'Tue', icon: CloudRain, temp: '24°C', condition: 'Rain' },
+    { day: isHindi ? 'बुध' : isPunjabi ? 'ਬੁੱਧ' : 'Wed', icon: Wind, temp: '26°C', condition: 'Windy' },
+    { day: isHindi ? 'गुरु' : isPunjabi ? 'ਵੀਰ' : 'Thu', icon: Sun, temp: '30°C', condition: 'Sunny' },
   ];
 
   return (
@@ -297,52 +329,70 @@ const FarmerDashboard: React.FC = () => {
 
               {/* Ready Soil Report Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 relative z-10">
-                {sampleSoilReports.map((rep) => (
-                  <div
-                    key={rep.id}
-                    className="bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl p-4 backdrop-blur-md transition-all flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="bg-emerald-300/20 border border-emerald-300/40 text-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                          {rep.cropPlanned}
-                        </span>
-                        <span className="text-[11px] text-emerald-300 font-mono">
-                          ID: {rep.sampleNo.split('-').slice(-2).join('-')}
-                        </span>
+                {sampleSoilReports.map((rep) => {
+                  const langKey = isHindi ? 'hindi' : isPunjabi ? 'regional' : 'english';
+                  const cropPlannedText = rep.cropPlanned[langKey] || rep.cropPlanned.english;
+                  const khasraText = rep.khasraNo[langKey] || rep.khasraNo.english;
+                  const overallHealthText = rep.overallHealth[langKey] || rep.overallHealth.english;
+
+                  return (
+                    <div
+                      key={rep.id}
+                      className="bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl p-4 backdrop-blur-md transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="bg-emerald-300/20 border border-emerald-300/40 text-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                            {cropPlannedText}
+                          </span>
+                          <span className="text-[11px] text-emerald-300 font-mono">
+                            ID: {rep.sampleNo.split('-').slice(-2).join('-')}
+                          </span>
+                        </div>
+
+                        <div className="font-bold text-white text-sm mb-1">{khasraText}</div>
+                        <div className="text-xs text-emerald-100 flex items-center justify-between mb-3">
+                          <span>
+                            {isHindi ? 'स्कोर:' : isPunjabi ? 'ਸਕੋਰ:' : 'Score:'}{' '}
+                            <strong className="text-emerald-300">{rep.overallScore}/100</strong> ({overallHealthText})
+                          </span>
+                          <span className="text-[11px] opacity-80">{rep.testingDate}</span>
+                        </div>
+
+                        {/* Nutrient Micro Badges */}
+                        <div className="flex flex-wrap gap-1.5 mb-3 text-[10px]">
+                          <span className="bg-red-400/25 text-red-200 border border-red-400/40 px-1.5 py-0.5 rounded font-semibold">
+                            N: {isHindi ? 'न्यून' : isPunjabi ? 'ਘੱਟ' : 'Low'}
+                          </span>
+                          <span className="bg-amber-400/25 text-amber-200 border border-amber-400/40 px-1.5 py-0.5 rounded font-semibold">
+                            P: {isHindi ? 'मध्यम' : isPunjabi ? 'ਦਰਮਿਆਨਾ' : 'Med'}
+                          </span>
+                          <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">
+                            K: {isHindi ? 'उत्तम' : isPunjabi ? 'ਉੱਤਮ' : 'High'}
+                          </span>
+                          <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">
+                            pH: 7.4 {isHindi ? 'सामान्य' : isPunjabi ? 'ਆਮ' : 'OK'}
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="font-bold text-white text-sm mb-1">{rep.khasraNo}</div>
-                      <div className="text-xs text-emerald-100 flex items-center justify-between mb-3">
-                        <span>Score: <strong className="text-emerald-300">{rep.overallScore}/100</strong> ({rep.overallHealth})</span>
-                        <span className="text-[11px] opacity-80">{rep.testingDate}</span>
-                      </div>
-
-                      {/* Nutrient Micro Badges */}
-                      <div className="flex flex-wrap gap-1.5 mb-3 text-[10px]">
-                        <span className="bg-red-400/25 text-red-200 border border-red-400/40 px-1.5 py-0.5 rounded font-semibold">N: Low</span>
-                        <span className="bg-amber-400/25 text-amber-200 border border-amber-400/40 px-1.5 py-0.5 rounded font-semibold">P: Med</span>
-                        <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">K: High</span>
-                        <span className="bg-emerald-400/25 text-emerald-200 border border-emerald-400/40 px-1.5 py-0.5 rounded font-semibold">pH: 7.4 OK</span>
+                      <div className="flex gap-2 pt-2 border-t border-white/15">
+                        <button
+                          onClick={() => setViewingSoilReport(rep)}
+                          className="flex-1 bg-white hover:bg-emerald-50 text-emerald-950 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        >
+                          <span>📄 {isHindi ? 'रिपोर्ट देखें' : isPunjabi ? 'ਰਿਪੋਰਟ ਵੇਖੋ' : 'View Report'}</span>
+                        </button>
+                        <button
+                          onClick={() => setViewingSoilReport(rep)}
+                          className="flex-1 bg-emerald-500/80 hover:bg-emerald-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        >
+                          <span>📥 {isHindi ? 'PDF डाउनलोड' : isPunjabi ? 'PDF ਡਾਊਨਲੋਡ' : 'Download PDF'}</span>
+                        </button>
                       </div>
                     </div>
-
-                    <div className="flex gap-2 pt-2 border-t border-white/15">
-                      <button
-                        onClick={() => setViewingSoilReport(rep)}
-                        className="flex-1 bg-white hover:bg-emerald-50 text-emerald-950 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
-                      >
-                        <span>📄 {isHindi ? 'रिपोर्ट देखें' : isPunjabi ? 'ਰਿਪੋਰਟ ਵੇਖੋ' : 'View Report'}</span>
-                      </button>
-                      <button
-                        onClick={() => setViewingSoilReport(rep)}
-                        className="flex-1 bg-emerald-500/80 hover:bg-emerald-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
-                      >
-                        <span>📥 {isHindi ? 'PDF डाउनलोड' : isPunjabi ? 'PDF ਡਾਊਨਲੋਡ' : 'Download PDF'}</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -361,52 +411,55 @@ const FarmerDashboard: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                {recentActivity.map((item, i) => (
-                  <div
-                    key={i}
-                    onClick={() => {
-                      if (item.title.toLowerCase().includes('soil')) {
-                        setViewingSoilReport(sampleSoilReports[0]);
-                      }
-                    }}
-                    className={`flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-slate-50 hover:bg-green-50/50 border border-slate-100 transition-colors ${
-                      item.title.toLowerCase().includes('soil') ? 'cursor-pointer hover:border-green-300' : ''
-                    }`}
-                  >
+                {recentActivity.map((item, i) => {
+                  const isSoil = item.type === 'soil' || item.title.toLowerCase().includes('soil') || item.title.includes('मृदा') || item.title.includes('ਮਿੱਟੀ');
+                  return (
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-                      style={{ background: `${item.color}15` }}
+                      key={i}
+                      onClick={() => {
+                        if (isSoil) {
+                          setViewingSoilReport(sampleSoilReports[0]);
+                        }
+                      }}
+                      className={`flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-slate-50 hover:bg-green-50/50 border border-slate-100 transition-colors ${
+                        isSoil ? 'cursor-pointer hover:border-green-300' : ''
+                      }`}
                     >
-                      {item.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-gray-900 text-xs sm:text-sm truncate flex items-center gap-2">
-                        <span>{item.title}</span>
-                        {item.title.toLowerCase().includes('soil') && (
-                          <span className="text-[10px] text-emerald-600 font-semibold underline">
-                            ({isHindi ? 'क्लिक करके PDF देखें' : 'Click to view PDF'})
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
+                        style={{ background: `${item.color}15` }}
+                      >
+                        {item.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-900 text-xs sm:text-sm truncate flex items-center gap-2">
+                          <span>{item.title}</span>
+                          {isSoil && (
+                            <span className="text-[10px] text-emerald-600 font-semibold underline">
+                              ({isHindi ? 'क्लिक करके PDF देखें' : isPunjabi ? 'ਕਲਿੱਕ ਕਰਕੇ PDF ਵੇਖੋ' : 'Click to view PDF'})
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-gray-500 text-[11px] sm:text-xs truncate">
+                          {item.desc}
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="text-[10px] text-gray-400">{item.time}</div>
+                        {item.status === 'new' && (
+                          <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                            NEW
+                          </span>
+                        )}
+                        {item.status === 'warning' && (
+                          <span className="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                            ACTION
                           </span>
                         )}
                       </div>
-                      <div className="text-gray-500 text-[11px] sm:text-xs truncate">
-                        {item.desc}
-                      </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <div className="text-[10px] text-gray-400">{item.time}</div>
-                      {item.status === 'new' && (
-                        <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
-                          NEW
-                        </span>
-                      )}
-                      {item.status === 'warning' && (
-                        <span className="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
-                          ACTION
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
