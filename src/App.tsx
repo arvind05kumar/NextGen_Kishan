@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/common/Navbar';
+import CircleEntryAnimation from './components/common/CircleEntryAnimation';
 import LoginPage from './components/auth/LoginPage';
 import RoleSelection from './components/auth/RoleSelection';
 import FarmerVerification from './components/verification/FarmerVerification';
@@ -13,6 +14,7 @@ import NGODashboard from './components/services/NGODashboard';
 
 const AppContent: React.FC = () => {
   const { currentStep } = useAuth();
+  const [showIntro, setShowIntro] = useState(true);
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -40,10 +42,19 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen w-full overflow-x-hidden ${currentStep === 'login' ? 'bg-[#06180c]' : 'bg-[#D2F2D4]'}`}>
-      <Navbar />
-      {renderCurrentStep()}
-    </div>
+    <>
+      {showIntro && (
+        <CircleEntryAnimation onComplete={() => setShowIntro(false)} />
+      )}
+      <div
+        className={`min-h-screen w-full overflow-x-hidden ${
+          currentStep === 'login' ? 'bg-[#06180c]' : 'bg-[#D2F2D4]'
+        } ${!showIntro ? 'animate-page-reveal' : ''}`}
+      >
+        <Navbar />
+        {renderCurrentStep()}
+      </div>
+    </>
   );
 };
 
