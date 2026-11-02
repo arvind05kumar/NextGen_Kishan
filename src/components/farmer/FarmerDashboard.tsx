@@ -4,13 +4,15 @@ import {
   TestTube2, Stethoscope, Camera, Truck, ArrowRight,
   Sun, CloudRain, Wind, TrendingUp, Bell, Star,
   CheckCircle, Clock, AlertCircle, Sprout, BarChart3, Wheat,
-  Bot
+  Sparkles
 } from 'lucide-react';
 import SoilCropTestModal from './modals/SoilCropTestModal';
 import SoilReportModal, { sampleSoilReports, SoilReportData } from './modals/SoilReportModal';
 import VetServiceModal from './modals/VetServiceModal';
 import CropScanningModal from './modals/CropScanningModal';
 import TransportModal from './modals/TransportModal';
+import CropPredictionModal from './modals/CropPredictionModal';
+import SeasonalCropPredictor from './SeasonalCropPredictor';
 
 const FarmerDashboard: React.FC = () => {
   const { user, language } = useAuth();
@@ -21,6 +23,18 @@ const FarmerDashboard: React.FC = () => {
   const isPunjabi = language === 'regional';
 
   const services = [
+    {
+      id: 'crop-prediction',
+      title: isHindi ? 'AI मौसमी फसल पूर्वानुमान' : isPunjabi ? 'AI ਮੌਸਮੀ ਫ਼ਸਲ ਭਵਿੱਖਬਾਣੀ' : 'Seasonal Crop Predictor',
+      description: isHindi ? 'वर्तमान मौसम, मिट्टी व पानी के अनुसार सबसे ज्यादा मुनाफे और पैदावार वाली फसल चुनें' : isPunjabi ? 'ਮੌਸਮ, ਮਿੱਟੀ ਅਤੇ ਪਾਣੀ ਮੁਤਾਬਕ ਵੱਧ ਮੁਨਾਫ਼ਾ ਤੇ ਝਾੜ ਦੇਣ ਵਾਲੀ ਫ਼ਸਲ ਚੁਣੋ' : 'Scientific crop suitability, yield & net profit forecast tailored to season, soil and water availability',
+      icon: Sprout,
+      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      bgGlass: 'rgba(16,185,129,0.08)',
+      borderColor: '#10b981',
+      badge: isHindi ? 'मौसम अनुरूप AI' : isPunjabi ? 'ਮੌਸਮ ਮੁਤਾਬਕ AI' : 'Smart AI',
+      badgeColor: '#10b981',
+      stats: 'Instant AI'
+    },
     {
       id: 'soil-crop-test',
       title: isHindi ? 'मृदा व फसल परीक्षण' : isPunjabi ? 'ਮਿੱਟੀ ਤੇ ਫ਼ਸਲ ਪਰਖ' : 'Soil & Crop Test',
@@ -170,11 +184,22 @@ const FarmerDashboard: React.FC = () => {
               >
                 <Bell className="w-5 h-5" />
               </button>
-              <div className="bg-white/15 border border-white/30 rounded-xl px-3.5 py-2 backdrop-blur-md text-center">
-                <div className="text-emerald-300 text-[10px] font-bold tracking-wider">SEASON</div>
-                <div className="text-white font-bold text-sm">Rabi 2025</div>
-                <div className="text-emerald-200 text-[10px]">Active</div>
-              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal('crop-prediction')}
+                className="bg-white/15 hover:bg-white/25 border border-white/30 rounded-xl px-3.5 py-2 backdrop-blur-md text-center transition-all cursor-pointer hover:scale-105 active:scale-95 text-left"
+                title="AI Crop Prediction System"
+              >
+                <div className="text-emerald-300 text-[10px] font-bold tracking-wider flex items-center gap-1">
+                  <span>SEASON</span>
+                  <Sparkles className="w-3 h-3 text-amber-300" />
+                </div>
+                <div className="text-white font-bold text-sm">Rabi 2025-26</div>
+                <div className="text-emerald-200 text-[10px] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{isHindi ? 'फसल चुनें' : isPunjabi ? 'ਫ਼ਸਲ ਚੁਣੋ' : 'Predict Crops'} →</span>
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -292,6 +317,9 @@ const FarmerDashboard: React.FC = () => {
                 })}
               </div>
             </div>
+
+            {/* AI Seasonal Crop Prediction System Section */}
+            <SeasonalCropPredictor onOpenServiceModal={(id) => setActiveModal(id)} />
 
             {/* Dedicated Soil Health Cards & PDF Reports Section */}
             <div className="bg-gradient-to-br from-emerald-900 via-green-800 to-emerald-950 rounded-2xl p-5 sm:p-6 text-white shadow-lg relative overflow-hidden">
@@ -570,6 +598,7 @@ const FarmerDashboard: React.FC = () => {
       </div>
 
       {/* Modals */}
+      {activeModal === 'crop-prediction' && <CropPredictionModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'soil-crop-test' && <SoilCropTestModal onClose={() => setActiveModal(null)} />}
       {viewingSoilReport && (
         <SoilReportModal
