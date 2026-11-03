@@ -13,8 +13,16 @@ const CropPredictionModal: React.FC<CropPredictionModalProps> = ({ onClose }) =>
   const isPunjabi = language === 'regional';
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-fadeIn">
-      <div className="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-emerald-100 flex flex-col">
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-[99999] overflow-y-auto animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-emerald-100 flex flex-col my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Top Bar */}
         <div className="flex justify-between items-center px-5 py-3.5 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-md z-20">
           <div className="flex items-center gap-2">

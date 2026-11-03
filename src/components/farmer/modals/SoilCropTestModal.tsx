@@ -413,8 +413,16 @@ const SoilCropTestModal: React.FC<SoilCropTestModalProps> = ({ onClose, initialT
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
-        <div className="bg-white rounded-2xl max-w-4xl w-full my-4 sm:my-6 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-[99999] overflow-y-auto"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          className="bg-white rounded-2xl max-w-4xl w-full my-4 sm:my-6 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
           
           {/* Header */}
           <div className="p-4 sm:p-5 bg-gradient-to-r from-emerald-800 via-green-700 to-emerald-900 text-white flex justify-between items-center shrink-0">

@@ -495,8 +495,16 @@ const SoilReportModal: React.FC<SoilReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-4xl w-full my-6 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+    <div
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-[100000] overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="bg-white rounded-2xl max-w-4xl w-full my-6 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Top Header Bar */}
         <div className="bg-gradient-to-r from-emerald-900 via-green-800 to-emerald-900 text-white p-4 sm:p-5 flex justify-between items-center shrink-0">

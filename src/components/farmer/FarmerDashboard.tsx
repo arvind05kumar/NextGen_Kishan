@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   TestTube2, Stethoscope, Camera, Truck, ArrowRight,
@@ -22,19 +23,29 @@ const FarmerDashboard: React.FC = () => {
   const isHindi = language === 'hindi';
   const isPunjabi = language === 'regional';
 
+  // Prevent background scrolling and enable Escape to close modals
+  useEffect(() => {
+    if (activeModal || viewingSoilReport) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          if (viewingSoilReport) {
+            setViewingSoilReport(null);
+          } else {
+            setActiveModal(null);
+          }
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [activeModal, viewingSoilReport]);
+
   const services = [
-    {
-      id: 'crop-prediction',
-      title: isHindi ? 'AI मौसमी फसल पूर्वानुमान' : isPunjabi ? 'AI ਮੌਸਮੀ ਫ਼ਸਲ ਭਵਿੱਖਬਾਣੀ' : 'Seasonal Crop Predictor',
-      description: isHindi ? 'वर्तमान मौसम, मिट्टी व पानी के अनुसार सबसे ज्यादा मुनाफे और पैदावार वाली फसल चुनें' : isPunjabi ? 'ਮੌਸਮ, ਮਿੱਟੀ ਅਤੇ ਪਾਣੀ ਮੁਤਾਬਕ ਵੱਧ ਮੁਨਾਫ਼ਾ ਤੇ ਝਾੜ ਦੇਣ ਵਾਲੀ ਫ਼ਸਲ ਚੁਣੋ' : 'Scientific crop suitability, yield & net profit forecast tailored to season, soil and water availability',
-      icon: Sprout,
-      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      bgGlass: 'rgba(16,185,129,0.08)',
-      borderColor: '#10b981',
-      badge: isHindi ? 'मौसम अनुरूप AI' : isPunjabi ? 'ਮੌਸਮ ਮੁਤਾਬਕ AI' : 'Smart AI',
-      badgeColor: '#10b981',
-      stats: 'Instant AI'
-    },
     {
       id: 'soil-crop-test',
       title: isHindi ? 'मृदा व फसल परीक्षण' : isPunjabi ? 'ਮਿੱਟੀ ਤੇ ਫ਼ਸਲ ਪਰਖ' : 'Soil & Crop Test',
@@ -258,8 +269,16 @@ const FarmerDashboard: React.FC = () => {
                   return (
                     <div
                       key={service.id}
+                      role="button"
+                      tabIndex={0}
                       onClick={() => setActiveModal(service.id)}
-                      className="group relative bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-slate-100 hover:-translate-y-1"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveModal(service.id);
+                        }
+                      }}
+                      className="group relative bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-slate-100 hover:-translate-y-1 select-none"
                       style={{
                         borderColor: `${service.borderColor}30`,
                       }}
@@ -272,7 +291,7 @@ const FarmerDashboard: React.FC = () => {
 
                       {/* Badge */}
                       <span
-                        className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-1 rounded-full border"
+                        className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-1 rounded-full border pointer-events-none"
                         style={{
                           background: `${service.badgeColor}15`,
                           color: service.badgeColor,
@@ -284,16 +303,16 @@ const FarmerDashboard: React.FC = () => {
 
                       {/* Icon */}
                       <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3.5 shadow-md"
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3.5 shadow-md pointer-events-none"
                         style={{ background: service.gradient }}
                       >
                         <Icon className="w-6 h-6 text-white" />
                       </div>
 
-                      <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1.5">
+                      <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1.5 pointer-events-none">
                         {service.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed mb-4">
+                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed mb-4 pointer-events-none">
                         {service.description}
                       </p>
 
@@ -304,13 +323,18 @@ const FarmerDashboard: React.FC = () => {
                         >
                           ⏱ {service.stats}
                         </span>
-                        <div
-                          className="flex items-center gap-1 font-bold text-xs sm:text-sm group-hover:translate-x-1 transition-transform"
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveModal(service.id);
+                          }}
+                          className="flex items-center gap-1 font-bold text-xs sm:text-sm group-hover:translate-x-1 transition-transform cursor-pointer bg-transparent border-0 p-0 focus:outline-none"
                           style={{ color: service.borderColor }}
                         >
                           <span>{isHindi ? 'बुक करें' : isPunjabi ? 'ਬੁੱਕ ਕਰੋ' : 'Book Now'}</span>
                           <ArrowRight className="w-4 h-4" />
-                        </div>
+                        </button>
                       </div>
                     </div>
                   );
@@ -597,18 +621,33 @@ const FarmerDashboard: React.FC = () => {
 
       </div>
 
-      {/* Modals */}
-      {activeModal === 'crop-prediction' && <CropPredictionModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'soil-crop-test' && <SoilCropTestModal onClose={() => setActiveModal(null)} />}
-      {viewingSoilReport && (
-        <SoilReportModal
-          report={viewingSoilReport}
-          onClose={() => setViewingSoilReport(null)}
-        />
+      {/* Modals Portal - mounted directly to document.body to prevent CSS transform/overflow containment issues */}
+      {typeof document !== 'undefined' && (activeModal || viewingSoilReport) && createPortal(
+        <div id="dashboard-modals-portal-root">
+          {activeModal === 'crop-prediction' && (
+            <CropPredictionModal onClose={() => setActiveModal(null)} />
+          )}
+          {activeModal === 'soil-crop-test' && (
+            <SoilCropTestModal onClose={() => setActiveModal(null)} />
+          )}
+          {viewingSoilReport && (
+            <SoilReportModal
+              report={viewingSoilReport}
+              onClose={() => setViewingSoilReport(null)}
+            />
+          )}
+          {activeModal === 'vet-service' && (
+            <VetServiceModal onClose={() => setActiveModal(null)} />
+          )}
+          {activeModal === 'crop-scanning' && (
+            <CropScanningModal onClose={() => setActiveModal(null)} />
+          )}
+          {activeModal === 'transport' && (
+            <TransportModal onClose={() => setActiveModal(null)} />
+          )}
+        </div>,
+        document.body
       )}
-      {activeModal === 'vet-service' && <VetServiceModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'crop-scanning' && <CropScanningModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'transport' && <TransportModal onClose={() => setActiveModal(null)} />}
     </div>
   );
 };

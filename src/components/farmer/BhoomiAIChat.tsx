@@ -2,12 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   Sparkles, Send, X, Bot, User, Mic, MicOff,
-  Volume2, VolumeX, Sprout, Square
+  Volume2, VolumeX, Sprout, Square, Settings, Key,
+  Check, ExternalLink, Trash2, ShieldCheck, Zap
 } from 'lucide-react';
 import {
   speakWithBrowser, stopBrowserSpeech, speakWithElevenLabs,
   createSpeechRecognition, DEFAULT_ELEVENLABS_VOICE_ID
 } from '../../utils/voiceService';
+import {
+  getBhoomiResponse, getGeminiApiKey, setGeminiApiKey
+} from '../../utils/bhoomiAiService';
 
 interface Message {
   id: string;
@@ -34,6 +38,14 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
   const [isVoiceReplyEnabled, setIsVoiceReplyEnabled] = useState(true);
   const [speechError, setSpeechError] = useState<string | null>(null);
 
+  // Settings & API Keys state
+  const [showSettings, setShowSettings] = useState(false);
+  const [geminiKeyInput, setGeminiKeyInput] = useState(getGeminiApiKey());
+  const [elevenLabsKeyInput, setElevenLabsKeyInput] = useState(
+    localStorage.getItem('bhoomi_elevenlabs_key') || ''
+  );
+  const [settingsFeedback, setSettingsFeedback] = useState<string | null>(null);
+
   // ElevenLabs API key from env or storage (voice ID is preset to ag3I9T3TmwdB4HocPu9E)
   const elevenLabsApiKey = (import.meta as any).env?.VITE_ELEVENLABS_API_KEY || localStorage.getItem('bhoomi_elevenlabs_key') || '';
   const elevenLabsVoiceId = DEFAULT_ELEVENLABS_VOICE_ID;
@@ -46,22 +58,26 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
   const isRegional = language === 'regional';
 
   // Initial welcome message based on language
+  const initWelcomeMessage = () => {
+    const welcomeText = isHindi
+      ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 मैं हूँ 'भूमि AI' (Bhoomi AI) — आपकी निजी डिजिटल कृषि सलाहकार।\n\nआप किसी भी फसल (गेहूं, सरसों, चना, कपास आदि), पीली पत्तियों, खाद की सही मात्रा, मौसम या पशु रोग के बारे में पूछ सकते हैं।\n\nमाइक (🎙️) दबाकर बोलें या नीचे लिखें — मैं बोलकर भी उत्तर दूंगी!`
+      : isRegional
+        ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 म्हूं 'भूमि AI' हूँ — थारी आवाज सूं चालण वाली डिजिटल खेती सलाहकार। फसल रा रोग, खाद-बीज या पशु इलाज बाबत माइक (🎙️) दबाय’र बोल सको हो, म्हूं बोल’र जवाब देसूं!`
+        : `Namaste ${user?.name || 'Kisan'}! 🙏 I am 'Bhoomi AI' — your voice-enabled digital farming advisor.\n\nAsk me about any crop (Wheat, Mustard, Gram, Cotton), yellow leaf diagnosis, fertilizer dosage, weather warnings, or livestock care.\n\nClick the Mic (🎙️) to speak or type below — I will also read my answers out loud to you!`;
+
+    setMessages([
+      {
+        id: 'welcome',
+        sender: 'ai',
+        text: welcomeText,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+    ]);
+  };
+
   useEffect(() => {
     if (messages.length === 0) {
-      const welcomeText = isHindi
-        ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 मैं हूँ 'भूमि AI' (Bhoomi AI) — आपकी निजी डिजिटल कृषि सलाहकार।\n\nआप माइक (🎙️) दबाकर बोल सकते हैं या लिखकर पूछ सकते हैं। मैं आपको बोलकर भी जवाब दूंगी!`
-        : isRegional
-          ? `राम-राम ${user?.name || 'किसान भाई'}! 🙏 म्हूं 'भूमि AI' हूँ — थारी आवाज सूं चालण वाली डिजिटल खेती सलाहकार। माइक (🎙️) दबाय’र बोल सको हो, म्हूं बोल’र भी जवाब देसूं!`
-          : `Namaste ${user?.name || 'Kisan'}! 🙏 I am 'Bhoomi AI' — your voice-enabled digital farming advisor.\n\nYou can click the Mic (🎙️) to speak your query, or type below. I will also read out my answers to you!`;
-
-      setMessages([
-        {
-          id: 'welcome',
-          sender: 'ai',
-          text: welcomeText,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ]);
+      initWelcomeMessage();
     }
   }, [language, user, isHindi, isRegional]);
 
@@ -83,6 +99,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
         recognitionRef.current.abort();
         setIsListening(false);
       }
+      setShowSettings(false);
     }
   }, [isOpen]);
 
@@ -98,9 +115,10 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
     setSpeakingMessageId(messageId);
 
     // If ElevenLabs API Key is present, call ElevenLabs with user's voice ID
-    if (elevenLabsApiKey.trim()) {
+    const activeElevenKey = (import.meta as any).env?.VITE_ELEVENLABS_API_KEY || localStorage.getItem('bhoomi_elevenlabs_key') || '';
+    if (activeElevenKey.trim()) {
       try {
-        const audio = await speakWithElevenLabs(text, elevenLabsApiKey.trim(), elevenLabsVoiceId);
+        const audio = await speakWithElevenLabs(text, activeElevenKey.trim(), elevenLabsVoiceId);
         currentAudioRef.current = audio;
         audio.onended = () => {
           setIsSpeaking(false);
@@ -199,73 +217,8 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
     setIsListening(false);
   };
 
-  // AI response engine with agricultural knowledge
-  const generateAIResponse = (query: string): string => {
-    const q = query.toLowerCase();
-
-    // 1. Wheat / गेहूं / Leaf yellowing
-    if (q.includes('wheat') || q.includes('गेहूं') || q.includes('पील') || q.includes('yellow') || q.includes('पत्ता')) {
-      return isHindi
-        ? '🌾 गेहूं में पीलापन का मुख्य कारण नाइट्रोजन की कमी या पीला रतुआ (Yellow Rust) है।\n\n1. निचली पत्तियां पीली होने पर: 2% यूरिया (100 लीटर पानी में 2 किलोग्राम यूरिया) का छिड़काव करें।\n2. फफूंद या पाउडर दिखने पर: प्रोपिकोनाजोल (Tilt 25 EC) 1 मिली प्रति लीटर पानी में मिलाकर तुरंत छिड़कें।\n3. खेत में जलभराव न होने दें।'
-        : isRegional
-          ? '🌾 गेहूं रा पीलापन रो समाधान: यूरिया री कमी होवे तो 2% यूरिया रो छिड़काव करो। फफूंद या रतुआ दिखे तो प्रोपिकोनाजोल 1 मिलीलीटर प्रति लीटर पानी में छिड़को।'
-          : '🌾 Wheat Leaf Yellowing Solution:\n\n1. Nitrogen Deficiency: If lower leaves turn pale yellow, spray 2% Urea solution (2 kg urea per 100L water).\n2. Yellow Rust: If yellow streaks or powder appear, apply Propiconazole (Tilt 25 EC) at 1 ml per liter of water immediately.\n3. Ensure proper drainage in the field.';
-    }
-
-    // 2. Soil test / मिट्टी / माटी
-    if (q.includes('soil') || q.includes('मिट्टी') || q.includes('माटी') || q.includes('test') || q.includes('जांच')) {
-      return isHindi
-        ? '🧪 मृदा परीक्षण (Soil Testing) करवाने के लिए:\n\n1. NextGen किसान पोर्टल के "Soil & Crop Test" विकल्प पर जाएं।\n2. खेत में 5 जगहों से 6 से 8 इंच गहराई से V-आकार में मिट्टी का नमूना लें।\n3. प्रमाणित लैब तकनीशियन आपके घर आकर सैंपल एकत्र करेंगे और 2-3 दिन में डिजिटल रिपोर्ट मिल जाएगी।'
-        : isRegional
-          ? '🧪 माटी री जांच वास्ते: NextGen किसान पर "Soil & Crop Test" बटन दबाओ। 5 जग्यां सूं 6-8 इंच गहरी माटी लेवो, लैब तकनीशियन थारे घर आ’र नमूना ले जासी।'
-          : '🧪 Soil Health Testing:\n\n1. Click on "Soil & Crop Test" on your NextGen Kisan dashboard.\n2. Collect soil from 5 spots in a V-shape pattern at 6-8 inches depth.\n3. A certified lab technician will collect the sample and upload your digital nutrient report within 2-3 days.';
-    }
-
-    // 3. PM-Kisan / योजना / subsidy / kcc
-    if (q.includes('pm-kisan') || q.includes('kisan') || q.includes('योजना') || q.includes('किस्त') || q.includes('subsidy') || q.includes('kcc')) {
-      return isHindi
-        ? '💰 पीएम-किसान सम्मान निधि (PM-KISAN):\n\n- पात्र किसानों को प्रति वर्ष ₹6,000 की सहायता 3 किस्तों में मिलती है।\n- अपनी किस्त प्राप्त करने के लिए आधार बायोमेट्रिक e-KYC और बैंक खाते में DBT लिंक अवश्य कराएं।\n- किसान क्रेडिट कार्ड (KCC) पर मात्र 4% ब्याज पर ₹3 लाख तक का कृषि ऋण उपलब्ध है।'
-        : isRegional
-          ? '💰 किसान सम्मान निधि: हर साल ₹6,000 आवै है। बायोमेट्रिक e-KYC जरूर करवा लीजो। KCC पर 4% ब्याज पर ऋण मिले है।'
-          : '💰 PM-KISAN & Govt Schemes:\n\n- Eligible farmers receive ₹6,000 annually in 3 installments of ₹2,000 directly via DBT.\n- Complete your biometric e-KYC and link Aadhaar with bank on pmkisan.gov.in.\n- Kisan Credit Card (KCC) provides subsidized crop loans up to ₹3 Lakhs at only 4% interest.';
-    }
-
-    // 4. Livestock / cow / buffalo / vet / पशु / गाय / भैंस / बुखार
-    if (q.includes('cow') || q.includes('buffalo') || q.includes('गाय') || q.includes('भैंस') || q.includes('पशु') || q.includes('बुखार') || q.includes('fever') || q.includes('vet')) {
-      return isHindi
-        ? '🐄 पशु स्वास्थ्य व देखभाल:\n\n1. मवेशी को बुखार होने पर छायादार, हवादार स्थान पर रखें और माथे पर गीला कपड़ा रखें।\n2. सादा पानी और गुड़-अजवाइन का काढ़ा दें।\n3. तुरंत डॉक्टर बुलाने के लिए NextGen किसान के "Veterinary Services" बटन से ऑन-फार्म होम विजिट बुक करें।'
-        : isRegional
-          ? '🐄 पशुवां रो इलाज: बुखार होवै तो गाय-भैंस ने छांव में राखो। तुरंत "Veterinary Services" सूं डॉक्टर ने घरै बुलाओ।'
-          : '🐄 Livestock Care & First Aid:\n\n1. If cattle have fever, move them to shaded, well-ventilated shelter and apply a cool wet cloth to the forehead.\n2. Keep fresh clean water available.\n3. Request a licensed doctor visit using the "Veterinary Services" button on your dashboard.';
-    }
-
-    // 5. Pest / Neem / कीटनाशक / कीड़ा / फंगस / fungus
-    if (q.includes('pest') || q.includes('neem') || q.includes('कीट') || q.includes('कीड़ा') || q.includes('कीटनाशक') || q.includes('insect') || q.includes('fungus')) {
-      return isHindi
-        ? '🐛 जैविक कीटनाशक (Neem Oil Spray):\n\n- 1 लीटर पानी में 5 मिली नीम का तेल (Neem Oil 1500 PPM) और थोड़ा साबुन/सर्फ मिलाकर छिड़कें।\n- यह माहू, सफेद मक्खी और सुंडी को प्राकृतिक रूप से नियंत्रित करता है और मित्र कीटों को नुकसान नहीं पहुँचाता।'
-        : isRegional
-          ? '🐛 नीम कीटनाशक: 1 लीटर पानी में 5ml नीम रो तेल मिला’र छिड़को। कीड़ा खत्म होवेला अर जमीन भी सुरक्षित रहवेला।'
-          : '🐛 Organic Neem Pest Control:\n\n- Mix 5 ml Neem Oil (1500 PPM) with 1 ml liquid soap in 1 liter of water.\n- Spray in early morning or evening. It controls aphids, whiteflies, and caterpillars safely without harming soil or bees.';
-    }
-
-    // 6. Fertilizer / NPK / यूरिया / DAP
-    if (q.includes('fertilizer') || q.includes('npk') || q.includes('urea') || q.includes('dap') || q.includes('खाद')) {
-      return isHindi
-        ? '🌱 खाद व पोषण प्रबंधन:\n\n- बुवाई के समय DAP या NPK दें, और पहली तथा दूसरी सिंचाई के बाद यूरिया को दो भागों में बांटकर (Top Dressing) दें।\n- खेत में वर्मीकम्पोस्ट (केंचुआ खाद) मिलाने से पैदावार 25% तक बढ़ती है।'
-        : isRegional
-          ? '🌱 खाद प्रबंधन: बुवाई बखत DAP अर सिंचाई रे साथे यूरिया देवो। देसी गोबर री खाद जरूर घालो।'
-          : '🌱 Fertilizer Management:\n\n- Apply DAP/Potash at sowing, and divide Urea into two split top-dressings after 1st and 2nd irrigations.\n- Adding Vermicompost increases water retention and crop yield up to 25%.';
-    }
-
-    // Fallback response
-    return isHindi
-      ? `🙏 आपका सवाल दर्ज कर लिया गया है। भूमि AI आपकी सेवा में तत्पर है। आप अपनी फसल (गेहूं, सरसों, चना, कपास), खाद या पशु के बारे में और पूछ सकते हैं। हमारे प्रमाणित डॉक्टर व लैब तकनीशियन भी आपकी सेवा के लिए उपलब्ध हैं।`
-      : isRegional
-        ? `🙏 थारो सवाल घणो बढ़िया है! खेती-बाड़ी या पशु इलाज वास्ते कोई भी जानकारी चाहिजे तो बताओ!`
-        : `🙏 Great question! As your Bhoomi AI assistant, I recommend checking soil moisture and weather forecast before spraying. Feel free to ask about any specific crop (Wheat, Mustard, Gram) or request certified experts directly on NextGen Kisan!`;
-  };
-
-  const handleSend = (textToSend?: string) => {
+  // Asynchronous Dynamic AI response engine (Gemini API + Comprehensive Agro Knowledge Base)
+  const handleSend = async (textToSend?: string) => {
     const text = (textToSend || inputValue).trim();
     if (!text) return;
 
@@ -282,8 +235,14 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
     setInputValue('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const aiReplyText = generateAIResponse(userMsg.text);
+    try {
+      const aiReplyText = await getBhoomiResponse(
+        userMsg.text,
+        messages,
+        language,
+        user?.name
+      );
+
       const aiMsgId = (Date.now() + 1).toString();
       const aiMsg: Message = {
         id: aiMsgId,
@@ -299,34 +258,69 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
       if (isVoiceReplyEnabled) {
         speakText(aiReplyText, aiMsgId);
       }
-    }, 850);
+    } catch (err) {
+      console.error('Failed to get Bhoomi AI response:', err);
+      setIsTyping(false);
+    }
   };
 
-  // Quick suggestions
+  // Quick suggestions with diverse agricultural topics
   const quickSuggestions = isHindi
     ? [
         '🌾 गेहूं में पीले पत्तों का इलाज?',
+        '🌿 सरसों में चेपा (माहू) की दवा?',
+        '🌱 नैनो यूरिया व DAP की खुराक?',
         '🧪 मिट्टी जांच (Soil Test) कैसे करवाएं?',
-        '💰 PM-किसान ₹6,000 की जानकारी',
-        '🐄 गाय/भैंस के बुखार की प्राथमिक दवा',
-        '🐛 जैविक नीम कीटनाशक कैसे बनाएं?',
+        '🐄 गाय/भैंस के बुखार का प्राथमिक उपचार',
+        '💰 PM-किसान ₹6,000 व KCC ऋण',
+        '🥔 आलू में झुलसा रोग का समाधान',
+        '🐛 दीमक व सुंडी से बचाव का उपाय',
+        '🍅 मिर्च-टमाटर में पत्ता मरोड़ (चुरमुरा)?',
       ]
     : isRegional
       ? [
-          '🌾 ਕਣਕ ਦੇ ਪੀਲੇ ਪੱਤਿਆਂ ਦਾ ਇਲਾਜ?',
-          '🧪 ਮਿੱਟੀ ਪਰਖ (Soil Test) ਕਿਵੇਂ ਕਰਵਾਈਏ?',
-          '💰 ਪੀ.ਐਮ-ਕਿਸਾਨ ਸਕੀਮ ਦੀ ਜਾਣਕਾਰੀ',
-          '🐄 ਬਿਮਾਰ ਪਸ਼ੂਆਂ ਦਾ ਘਰੇਲੂ ਇਲਾਜ',
+          '🌾 गेहूं रो पीलापन अर यूरिया?',
+          '🌿 सरसों में चेपा रो इलाज?',
+          '🌱 नैनो यूरिया री खुराक?',
+          '🧪 माटी री जांच कियां करावां?',
+          '🐄 बीमार पशुवां रो इलाज?',
+          '💰 PM-किसान योजना री जानकारी',
         ]
       : [
           '🌾 How to fix yellow leaves in wheat?',
+          '🌿 Remedy for mustard aphids (chepa)?',
+          '🌱 Correct DAP & Nano Urea dosage?',
           '🧪 How to book a Soil Health Test?',
+          '🐄 First aid for livestock fever & milk yield',
           '💰 PM-Kisan subsidy status & eligibility',
-          '🐄 First aid for livestock fever',
-          '🐛 How to make organic neem pesticide?',
+          '🥔 Late blight disease treatment in potato',
+          '🐛 How to control termites and pod borers?',
+          '🍅 Remedy for leaf curl in tomato/chilli',
         ];
 
+  const handleSaveSettings = () => {
+    setGeminiApiKey(geminiKeyInput.trim());
+    if (elevenLabsKeyInput.trim()) {
+      localStorage.setItem('bhoomi_elevenlabs_key', elevenLabsKeyInput.trim());
+    } else {
+      localStorage.removeItem('bhoomi_elevenlabs_key');
+    }
+    setSettingsFeedback(isHindi ? 'सेटिंग्स सफलतापूर्वक सहेजी गईं! ✅' : 'Settings saved successfully! ✅');
+    setTimeout(() => {
+      setSettingsFeedback(null);
+      setShowSettings(false);
+    }, 1200);
+  };
+
+  const handleClearHistory = () => {
+    stopSpeaking();
+    initWelcomeMessage();
+    setShowSettings(false);
+  };
+
   if (!isOpen) return null;
+
+  const hasGeminiKey = Boolean(getGeminiApiKey());
 
   return (
     <>
@@ -355,7 +349,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           right: '24px',
           zIndex: 99999,
           width: 'clamp(320px, 92vw, 440px)',
-          height: 'clamp(480px, 85vh, 660px)',
+          height: 'clamp(500px, 86vh, 680px)',
           maxHeight: 'calc(100vh - 36px)',
           backgroundColor: '#ffffff',
           borderRadius: '24px',
@@ -367,11 +361,11 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           animation: 'slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* Header - Clean without slider/technical controls */}
+        {/* Header with Mode indicators & Controls */}
         <div
           style={{
             background: 'linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
-            padding: '0.9rem 1.25rem',
+            padding: '0.85rem 1.15rem',
             color: '#ffffff',
             display: 'flex',
             alignItems: 'center',
@@ -383,9 +377,9 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
             {/* Animated Avatar */}
             <div
               style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '14px',
+                width: '42px',
+                height: '42px',
+                borderRadius: '13px',
                 backgroundColor: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
@@ -394,7 +388,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                 position: 'relative',
               }}
             >
-              <Sprout style={{ width: '26px', height: '26px', color: '#16a34a' }} />
+              <Sprout style={{ width: '24px', height: '24px', color: '#16a34a' }} />
               <div
                 style={{
                   position: 'absolute',
@@ -413,22 +407,28 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>
+                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>
                   Bhoomi AI
                 </h3>
                 <span
                   style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                    backgroundColor: hasGeminiKey ? 'rgba(254, 240, 138, 0.3)' : 'rgba(255, 255, 255, 0.22)',
+                    color: hasGeminiKey ? '#fef08a' : '#ffffff',
                     padding: '0.1rem 0.45rem',
                     borderRadius: '6px',
-                    fontSize: '0.65rem',
+                    fontSize: '0.62rem',
                     fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.2rem',
                   }}
+                  title={hasGeminiKey ? 'Gemini 2.5 Flash Online Engine' : 'Built-in 100+ Topics Agricultural Engine'}
                 >
-                  {isHindi ? 'महिला आवाज 🎙️' : 'Female Voice 🎙️'}
+                  {hasGeminiKey ? <Zap style={{ width: '10px', height: '10px' }} /> : <ShieldCheck style={{ width: '10px', height: '10px' }} />}
+                  {hasGeminiKey ? 'Gemini Live' : (isHindi ? 'कृषि ज्ञान' : 'Agro Brain')}
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.75rem', color: '#dcfce7', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <p style={{ margin: 0, fontSize: '0.72rem', color: '#dcfce7', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                 {isListening ? (
                   <span style={{ color: '#fef08a', fontWeight: 700 }}>
                     🔴 {isHindi ? 'सुन रही है... बोलिए' : 'Listening... Speak now'}
@@ -447,7 +447,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           </div>
 
           {/* Action buttons in header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             {/* Voice Reply Toggle */}
             <button
               onClick={() => {
@@ -462,25 +462,25 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.3rem',
-                padding: '0.35rem 0.65rem',
+                gap: '0.25rem',
+                padding: '0.3rem 0.55rem',
                 borderRadius: '8px',
                 backgroundColor: isVoiceReplyEnabled ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)',
                 border: 'none',
                 color: '#ffffff',
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 fontWeight: 700,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
             >
               {isVoiceReplyEnabled ? (
-                <Volume2 style={{ width: '15px', height: '15px' }} />
+                <Volume2 style={{ width: '14px', height: '14px' }} />
               ) : (
-                <VolumeX style={{ width: '15px', height: '15px', color: '#fca5a5' }} />
+                <VolumeX style={{ width: '14px', height: '14px', color: '#fca5a5' }} />
               )}
               <span className="hidden sm:inline">
-                {isVoiceReplyEnabled ? (isHindi ? 'आवाज ON' : 'Voice ON') : (isHindi ? 'म्यूट' : 'Muted')}
+                {isVoiceReplyEnabled ? (isHindi ? 'आवाज' : 'Voice') : (isHindi ? 'म्यूट' : 'Mute')}
               </span>
             </button>
 
@@ -490,8 +490,8 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                 onClick={stopSpeaking}
                 title={isHindi ? 'आवाज रोकें' : 'Stop Audio'}
                 style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '50%',
                   backgroundColor: '#ef4444',
                   border: 'none',
@@ -503,9 +503,30 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                   animation: 'pulse 1s infinite',
                 }}
               >
-                <Square style={{ width: '13px', height: '13px', fill: 'white' }} />
+                <Square style={{ width: '12px', height: '12px', fill: 'white' }} />
               </button>
             )}
+
+            {/* AI Settings Toggle Button */}
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              title={isHindi ? 'AI सेटिंग्स (Gemini API Key)' : 'AI Settings (Gemini API Key)'}
+              style={{
+                width: '30px',
+                height: '30px',
+                borderRadius: '50%',
+                backgroundColor: showSettings ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+                border: 'none',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              <Settings style={{ width: '15px', height: '15px' }} />
+            </button>
 
             {/* Close Button */}
             <button
@@ -515,8 +536,8 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
               }}
               title={isHindi ? 'बंद करें' : 'Close'}
               style={{
-                width: '32px',
-                height: '32px',
+                width: '30px',
+                height: '30px',
                 borderRadius: '50%',
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 border: 'none',
@@ -527,10 +548,168 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                 cursor: 'pointer',
               }}
             >
-              <X style={{ width: '18px', height: '18px' }} />
+              <X style={{ width: '17px', height: '17px' }} />
             </button>
           </div>
         </div>
+
+        {/* Settings Drawer / Panel */}
+        {showSettings && (
+          <div
+            style={{
+              padding: '1rem',
+              backgroundColor: '#f8fafc',
+              borderBottom: '2px solid #86efac',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              fontSize: '0.82rem',
+              boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.05)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ fontWeight: 800, color: '#166534', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Settings style={{ width: '16px', height: '16px', color: '#16a34a' }} />
+                <span>{isHindi ? 'Bhoomi AI सेटिंग्स' : 'Bhoomi AI Configuration'}</span>
+              </div>
+              <button
+                onClick={handleClearHistory}
+                title={isHindi ? 'बातचीत साफ करें' : 'Reset Chat'}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  fontSize: '0.72rem',
+                  padding: '0.2rem 0.5rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#fee2e2',
+                  color: '#b91c1c',
+                  border: '1px solid #fecaca',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                }}
+              >
+                <Trash2 style={{ width: '11px', height: '11px' }} />
+                <span>{isHindi ? 'चैट रीसेट' : 'Clear Chat'}</span>
+              </button>
+            </div>
+
+            {/* Current Engine Status */}
+            <div
+              style={{
+                padding: '0.55rem 0.75rem',
+                borderRadius: '10px',
+                backgroundColor: hasGeminiKey ? '#ecfdf5' : '#f0fdf4',
+                border: `1px solid ${hasGeminiKey ? '#a7f3d0' : '#bbf7d0'}`,
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.5rem',
+              }}
+            >
+              {hasGeminiKey ? (
+                <Zap style={{ width: '18px', height: '18px', color: '#059669', flexShrink: 0, marginTop: '2px' }} />
+              ) : (
+                <Sprout style={{ width: '18px', height: '18px', color: '#16a34a', flexShrink: 0, marginTop: '2px' }} />
+              )}
+              <div style={{ lineHeight: 1.4 }}>
+                <div style={{ fontWeight: 700, color: hasGeminiKey ? '#065f46' : '#166534' }}>
+                  {hasGeminiKey
+                    ? (isHindi ? '⚡ Google Gemini AI सक्रिय है' : '⚡ Google Gemini AI Active')
+                    : (isHindi ? '🌾 अंतर्निहित कृषि ज्ञान इंजन सक्रिय है' : '🌾 Built-in Agricultural Brain Active')}
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#475569' }}>
+                  {hasGeminiKey
+                    ? (isHindi ? 'सभी सवालों के विस्तृत, लाइव AI उत्तर प्राप्त हो रहे हैं।' : 'Answering with live generative intelligence for all farming questions.')
+                    : (isHindi ? '100+ फसलों, रोगों, खादों और योजनाओं के सटीक ऑफलाइन उत्तर तैयार हैं। (वैकल्पिक रूप से नीचे Gemini API Key जोड़ सकते हैं)' : '100+ crop topics, disease remedies, fertilizer & schemes covered out of the box.')}
+                </div>
+              </div>
+            </div>
+
+            {/* Gemini API Key input */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                <label style={{ fontWeight: 700, color: '#334155', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <Key style={{ width: '13px', height: '13px', color: '#64748b' }} />
+                  <span>Google Gemini API Key (Optional)</span>
+                </label>
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: '0.7rem',
+                    color: '#2563eb',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.2rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  <span>{isHindi ? 'फ्री की (Key) लें' : 'Get Free Key'}</span>
+                  <ExternalLink style={{ width: '10px', height: '10px' }} />
+                </a>
+              </div>
+              <input
+                type="password"
+                value={geminiKeyInput}
+                onChange={(e) => setGeminiKeyInput(e.target.value)}
+                placeholder="AIzaSy..."
+                style={{
+                  width: '100%',
+                  padding: '0.45rem 0.65rem',
+                  borderRadius: '8px',
+                  border: '1px solid #cbd5e1',
+                  fontSize: '0.8rem',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Save Buttons & Feedback */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.2rem' }}>
+              <div style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>
+                {settingsFeedback}
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  style={{
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '8px',
+                    border: '1px solid #cbd5e1',
+                    backgroundColor: '#ffffff',
+                    color: '#475569',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {isHindi ? 'रद्द करें' : 'Close'}
+                </button>
+                <button
+                  onClick={handleSaveSettings}
+                  style={{
+                    padding: '0.35rem 0.85rem',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: '#16a34a',
+                    color: '#ffffff',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                  }}
+                >
+                  <Check style={{ width: '13px', height: '13px' }} />
+                  <span>{isHindi ? 'सेव करें' : 'Save'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Listening Active Wave Banner */}
         {isListening && (
@@ -822,7 +1001,11 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                 }}
               >
                 <Sparkles style={{ width: '14px', height: '14px', color: '#16a34a' }} />
-                <span>{isHindi ? 'भूमि AI उत्तर सोच रही है...' : 'Bhoomi AI is analyzing...'}</span>
+                <span>
+                  {hasGeminiKey
+                    ? (isHindi ? 'भूमि AI (Gemini) उत्तर सोच रही है...' : 'Bhoomi AI (Gemini) is thinking...')
+                    : (isHindi ? 'भूमि AI कृषि उत्तर तैयार कर रही है...' : 'Bhoomi AI is analyzing advice...')}
+                </span>
               </div>
             </div>
           )}
