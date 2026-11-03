@@ -44,7 +44,8 @@ Guidelines:
 4. Always prioritize organic / eco-friendly / integrated pest management (IPM) first, followed by safe chemical recommendations if needed.
 5. Mention relevant NextGen Kisan platform services when helpful (Soil & Crop Testing home collection, AI Crop Health Scanner, Veterinary Doctor booking, Mandi Transport booking, Seasonal Crop Predictor).
 6. Keep responses concise and formatted with clean bullet points and short paragraphs (around 80-150 words) so they read well and sound great via voice Text-to-Speech.
-7. Never repeat generic filler apologies. Answer the specific question directly.`;
+7. Never repeat generic filler apologies. Answer the specific question directly.
+8. Official Emergency Helpline & Lab Calling Number is +91 7667181474. If the farmer asks to call, asks to save crops via calling lab/doctor/helpline, or requests a call to any number, warmly confirm connecting them to +91 7667181474 right now.`;
 };
 
 // Call Google Gemini API (tries 2.5-flash -> 2.0-flash -> 1.5-flash)
@@ -154,8 +155,67 @@ export type UserIntent =
   | 'ORGANIC'
   | 'WEATHER'
   | 'PLATFORM_TOOLS'
+  | 'CALL_SERVICE'
   | 'CROP_GENERAL'
   | 'UNKNOWN';
+
+export const BHOOMI_DEFAULT_CALL_PHONE = '+91 7667181474';
+
+export const extractPhoneNumber = (text: string): string => {
+  const match = text.match(/(\+?91[\s-]?)?[6-9]\d{9}/);
+  if (match) {
+    let num = match[0].replace(/[\s-]/g, '');
+    if (!num.startsWith('+91')) {
+      if (num.startsWith('91') && num.length === 12) {
+        num = '+' + num;
+      } else {
+        num = '+91 ' + num;
+      }
+    } else {
+      num = '+91 ' + num.substring(3);
+    }
+    return num;
+  }
+  return BHOOMI_DEFAULT_CALL_PHONE;
+};
+
+export const isCallIntent = (text: string): boolean => {
+  const q = text.toLowerCase();
+  return (
+    hasAny(
+      q,
+      'call',
+      'calll',
+      'calling',
+      'dial',
+      'phone',
+      'helpline',
+      'contact number',
+      'phone lagao',
+      'call lagao',
+      'call karo',
+      'call kardo',
+      'phone kardo',
+      'phone milao',
+      'call milao',
+      'lab ko call',
+      'doctor ko call',
+      'help me saving my crops',
+      'save my crop',
+      'save my crops',
+      'emergency call',
+      'कॉल',
+      'फोन',
+      'सम्पर्क',
+      'हेल्पलाइन',
+      'फोन लगाओ',
+      'कॉल लगाओ',
+      '7667181474'
+    ) ||
+    /(\+?91[\s-]?)?[6-9]\d{9}/.test(q) ||
+    /call\s*(the)?\s*(lab|doctor|vet|expert|service|helpline|officer)/i.test(q)
+  );
+};
 
 // Strict word-boundary matching for ASCII keywords (avoids 'rice' in 'price', 'rai' in 'rain', etc.)
 const hasWord = (text: string, word: string): boolean => {
@@ -197,7 +257,12 @@ export const detectCrop = (q: string): CropType | null => {
 
 // Detect User Intent
 export const detectIntent = (q: string): UserIntent => {
-  // 1. Greetings
+  // 1. Calling & Emergency Lab Helpline (Priority check)
+  if (isCallIntent(q)) {
+    return 'CALL_SERVICE';
+  }
+
+  // 2. Greetings
   if (
     /^(hi|hello|hey|namaste|namaskar|ram\s*ram|pranam|sat\s*sri\s*akal|kese\s*ho|kaise\s*ho|kem\s*cho|halo|नमस्ते|राम-राम|राम\s*राम|सत\s*श्री\s*अकाल|नमस्कार|प्रणाम)/i.test(
       q
@@ -834,6 +899,17 @@ const getDynamicFallbackResponse = (query: string, lang: string): string => {
   return `🙏 That's a great farming question! As your Bhoomi AI agronomy advisor, I am ready to help you with:\n\n• Today's Mandi Prices & MSP (e.g. "wheat price in mandi today", "mustard rate")\n• Sowing, fertilizer & irrigation for any crop (Wheat, Mustard, Gram, Potato, Cotton)\n• Rapid remedies for yellow leaves, caterpillars, aphids & blights\n• Cattle fever, mastitis & milk yield enhancement\n• PM-Kisan subsidy status & KCC bank loans\n\nPlease specify your crop or issue, or click the Mic (🎙️) to speak!`;
 };
 
+// 16. EMERGENCY CALLING & LAB SERVICE
+export const getCallServiceResponse = (phoneNumber: string, lang: string): string => {
+  if (lang === 'hindi') {
+    return `🚨 किसान भाई, मैंने आपकी फसल सुरक्षा के लिए "NextGen Kisan लैब एवं कृषि आपातकालीन सेवा" को कॉल कनेक्ट कर दिया है!\n\n📞 आपातकालीन हेल्पलाइन: ${phoneNumber}\n\n🌾 तत्काल उपलब्ध सेवाएं:\n• खेत से मिट्टी व फसल रोग सैंपल का तुरंत संकलन\n• पीलापन, फंगस, सुंडी व झुलसा रोग का त्वरित वैज्ञानिक उपचार\n• 24x7 कृषि वैज्ञानिक एवं लैब सहायता\n\nआप नीचे दिए गए "अभी कॉल लगाएं" बटन पर टैप करके तुरंत बात कर सकते हैं!`;
+  }
+  if (lang === 'regional') {
+    return `🚨 राम-राम किसान भाई! थारी फसल रो नुकसान बचावण वास्ते NextGen Kisan लैब सेवा रो फोन नंबर ${phoneNumber} जोड़ दियो है!\n\n📞 हेल्पलाइन नंबर: ${phoneNumber}\n\n🌾 तुरंत सहायता:\n• खेत सूं मिट्टी व फसल रोग री तुरंत जांच\n• पीलापन व कीड़ा रो वैज्ञानिक इलाज\n\nनीचे दिए "कॉल लगाएं" बटन पे दबा’र तुरंत फोन लगा सको हो!`;
+  }
+  return `🚨 Farmer friend, I have connected you to the NextGen Kisan Emergency Lab & Crop Advisory Service to save your crop immediately!\n\n📞 Direct Helpline: ${phoneNumber}\n\n🌾 Immediate Services Available:\n• Rapid soil test & crop disease diagnostics\n• Urgent remedies for yellowing, blights, pests & fungal rot\n• 24x7 certified agronomist & laboratory consultation\n\nTap the "Call Now" button below to connect directly with our experts!`;
+};
+
 // -------------------------------------------------------------
 // MAIN RESPONSE ENTRY POINT
 // -------------------------------------------------------------
@@ -868,6 +944,9 @@ export const getBhoomiResponse = async (
 
     case 'WHO_ARE_YOU':
       return getWhoAreYouResponse(language);
+
+    case 'CALL_SERVICE':
+      return getCallServiceResponse(extractPhoneNumber(cleanQ), language);
 
     case 'MANDI_PRICE':
       return getMandiPriceResponse(crop, language);

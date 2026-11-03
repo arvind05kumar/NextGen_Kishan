@@ -3,14 +3,16 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   Sparkles, Send, X, Bot, User, Mic, MicOff,
   Volume2, VolumeX, Sprout, Square, Settings, Key,
-  Check, ExternalLink, Trash2, ShieldCheck, Zap
+  Check, ExternalLink, Trash2, ShieldCheck, Zap,
+  Phone, PhoneCall, Copy, CheckCheck, MessageCircle
 } from 'lucide-react';
 import {
   speakWithBrowser, stopBrowserSpeech, speakWithElevenLabs,
   createSpeechRecognition, DEFAULT_ELEVENLABS_VOICE_ID
 } from '../../utils/voiceService';
 import {
-  getBhoomiResponse, getGeminiApiKey, setGeminiApiKey
+  getBhoomiResponse, getGeminiApiKey, setGeminiApiKey,
+  isCallIntent, extractPhoneNumber, BHOOMI_DEFAULT_CALL_PHONE
 } from '../../utils/bhoomiAiService';
 
 interface Message {
@@ -18,6 +20,11 @@ interface Message {
   sender: 'ai' | 'user';
   text: string;
   time: string;
+  callData?: {
+    phoneNumber: string;
+    recipientName: string;
+    serviceType: string;
+  };
 }
 
 interface BhoomiAIChatProps {
@@ -37,6 +44,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
   const [isVoiceReplyEnabled, setIsVoiceReplyEnabled] = useState(true);
   const [speechError, setSpeechError] = useState<string | null>(null);
+  const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
 
   // Settings & API Keys state
   const [showSettings, setShowSettings] = useState(false);
@@ -236,6 +244,9 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
     setIsTyping(true);
 
     try {
+      const isCallReq = isCallIntent(userMsg.text);
+      const phoneNum = extractPhoneNumber(userMsg.text) || BHOOMI_DEFAULT_CALL_PHONE;
+
       const aiReplyText = await getBhoomiResponse(
         userMsg.text,
         messages,
@@ -243,12 +254,26 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
         user?.name
       );
 
+      const hasCallInResponse = isCallReq || isCallIntent(aiReplyText) || aiReplyText.includes('7667181474');
+      const finalPhone = isCallReq ? phoneNum : (extractPhoneNumber(aiReplyText) || BHOOMI_DEFAULT_CALL_PHONE);
+
       const aiMsgId = (Date.now() + 1).toString();
       const aiMsg: Message = {
         id: aiMsgId,
         sender: 'ai',
         text: aiReplyText,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        callData: hasCallInResponse
+          ? {
+              phoneNumber: finalPhone,
+              recipientName: isHindi
+                ? 'NextGen Kisan लैब एवं कृषि आपातकालीन सेवा'
+                : isRegional
+                ? 'NextGen Kisan लैब सेवा'
+                : 'NextGen Kisan Lab & Emergency Agronomy Service',
+              serviceType: 'Emergency Lab & Crop Advisory Helpline',
+            }
+          : undefined,
       };
 
       setMessages((prev) => [...prev, aiMsg]);
@@ -267,6 +292,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
   // Quick suggestions with diverse agricultural topics
   const quickSuggestions = isHindi
     ? [
+        '📞 लैब हेल्पलाइन कॉल (+91 7667181474)',
         '🌾 गेहूं में पीले पत्तों का इलाज?',
         '🌿 सरसों में चेपा (माहू) की दवा?',
         '🌱 नैनो यूरिया व DAP की खुराक?',
@@ -279,6 +305,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
       ]
     : isRegional
       ? [
+          '📞 लैब फोन हेल्पलाइन (+91 7667181474)',
           '🌾 गेहूं रो पीलापन अर यूरिया?',
           '🌿 सरसों में चेपा रो इलाज?',
           '🌱 नैनो यूरिया री खुराक?',
@@ -287,6 +314,7 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
           '💰 PM-किसान योजना री जानकारी',
         ]
       : [
+          '📞 Call Lab Helpline (+91 7667181474)',
           '🌾 How to fix yellow leaves in wheat?',
           '🌿 Remedy for mustard aphids (chepa)?',
           '🌱 Correct DAP & Nano Urea dosage?',
@@ -885,6 +913,279 @@ export const BhoomiAIChat: React.FC<BhoomiAIChatProps> = ({ isOpen, onClose }) =
                   }}
                 >
                   <div>{msg.text}</div>
+
+                  {/* Calling Action Tile inside Message Bubble (Technique 1: Direct Device Call) */}
+                  {msg.callData && (
+                    <div
+                      style={{
+                        marginTop: '0.75rem',
+                        background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
+                        color: '#ffffff',
+                        borderRadius: '16px',
+                        padding: '0.85rem',
+                        boxShadow: '0 8px 24px rgba(6, 78, 59, 0.35)',
+                        border: '1.5px solid #34d399',
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {/* Top Header: Pulsing Live Beacon */}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          paddingBottom: '0.5rem',
+                          marginBottom: '0.6rem',
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                          <span
+                            style={{
+                              position: 'relative',
+                              display: 'flex',
+                              width: '10px',
+                              height: '10px',
+                            }}
+                          >
+                            <span
+                              style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '50%',
+                                backgroundColor: '#4ade80',
+                                opacity: 0.75,
+                                animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+                              }}
+                            />
+                            <span
+                              style={{
+                                width: '10px',
+                                height: '10px',
+                                borderRadius: '50%',
+                                backgroundColor: '#22c55e',
+                              }}
+                            />
+                          </span>
+                          <span
+                            style={{
+                              fontSize: '0.68rem',
+                              fontWeight: 800,
+                              letterSpacing: '0.04em',
+                              textTransform: 'uppercase',
+                              color: '#a7f3d0',
+                            }}
+                          >
+                            {isHindi
+                              ? 'आपातकालीन लैब हेल्पलाइन • 24x7 सक्रिय'
+                              : isRegional
+                              ? 'ਲੈਬ ਹੈਲਪਲਾਈਨ • 24x7 ਚਾਲੂ'
+                              : 'EMERGENCY LAB & AGRI HELPLINE • 24x7'}
+                          </span>
+                        </div>
+
+                        <span
+                          style={{
+                            fontSize: '0.62rem',
+                            fontWeight: 700,
+                            backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                            color: '#d1fae5',
+                            padding: '0.1rem 0.45rem',
+                            borderRadius: '9999px',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                          }}
+                        >
+                          ✓ Verified NextGen Kisan
+                        </span>
+                      </div>
+
+                      {/* Recipient & Phone Number Display */}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '14px',
+                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 12px rgba(5, 150, 105, 0.4)',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <PhoneCall style={{ width: '22px', height: '22px', color: '#ffffff' }} />
+                        </div>
+
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div
+                            style={{
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              color: '#a7f3d0',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {msg.callData.recipientName}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: '1.25rem',
+                              fontWeight: 900,
+                              color: '#ffffff',
+                              letterSpacing: '0.02em',
+                              fontFamily: 'monospace',
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {msg.callData.phoneNumber}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: '0.68rem',
+                              color: '#dcfce7',
+                              opacity: 0.9,
+                              marginTop: '2px',
+                            }}
+                          >
+                            🌾 {isHindi ? 'मिट्टी जांच • पीलापन व रोग निदान • वैज्ञानिक सलाह' : 'Soil Test • Disease Diagnosis • Agronomist Visit'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons: 1-Click Dial + Copy + WhatsApp */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+                        {/* Primary Call Now Button */}
+                        <a
+                          href={`tel:${msg.callData.phoneNumber.replace(/[\s-]/g, '')}`}
+                          style={{
+                            flex: '1 1 180px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.45rem',
+                            padding: '0.65rem 0.9rem',
+                            borderRadius: '12px',
+                            background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: '0.82rem',
+                            textDecoration: 'none',
+                            boxShadow: '0 4px 14px rgba(22, 163, 74, 0.45)',
+                            border: '1px solid #86efac',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s',
+                          }}
+                          title="Click to place phone call"
+                        >
+                          <Phone style={{ width: '15px', height: '15px', fill: '#ffffff' }} />
+                          <span>
+                            {isHindi
+                              ? `अभी कॉल लगाएं (${msg.callData.phoneNumber})`
+                              : isRegional
+                              ? `ਕਾਲ ਲਗਾਓ (${msg.callData.phoneNumber})`
+                              : `Call Now (${msg.callData.phoneNumber})`}
+                          </span>
+                        </a>
+
+                        {/* Copy Number Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (msg.callData?.phoneNumber) {
+                              navigator.clipboard.writeText(msg.callData.phoneNumber);
+                              setCopiedPhone(msg.callData.phoneNumber);
+                              setTimeout(() => setCopiedPhone(null), 2500);
+                            }
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.35rem',
+                            padding: '0.65rem 0.75rem',
+                            borderRadius: '12px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                            color: '#ffffff',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            border: '1px solid rgba(255, 255, 255, 0.25)',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s',
+                          }}
+                          title="Copy phone number"
+                        >
+                          {copiedPhone === msg.callData.phoneNumber ? (
+                            <>
+                              <CheckCheck style={{ width: '14px', height: '14px', color: '#86efac' }} />
+                              <span>{isHindi ? 'कॉपी हो गया' : 'Copied'}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy style={{ width: '14px', height: '14px' }} />
+                              <span>{isHindi ? 'कॉपी' : 'Copy'}</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* WhatsApp Button */}
+                        <a
+                          href={`https://wa.me/${msg.callData.phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                            isHindi
+                              ? 'नमस्ते, मेरी फसल में समस्या है। कृपया तुरंत सहायता और लैब जांच सेवा प्रदान करें।'
+                              : 'Hello NextGen Kisan, I need urgent assistance with my crop and lab service.'
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.35rem',
+                            padding: '0.65rem 0.75rem',
+                            borderRadius: '12px',
+                            backgroundColor: 'rgba(37, 211, 102, 0.22)',
+                            color: '#bbf7d0',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            textDecoration: 'none',
+                            border: '1px solid rgba(37, 211, 102, 0.4)',
+                            cursor: 'pointer',
+                          }}
+                          title="WhatsApp Chat"
+                        >
+                          <MessageCircle style={{ width: '14px', height: '14px' }} />
+                          <span>WhatsApp</span>
+                        </a>
+                      </div>
+
+                      {/* Footer footnote */}
+                      <div
+                        style={{
+                          fontSize: '0.65rem',
+                          color: '#a7f3d0',
+                          opacity: 0.85,
+                          textAlign: 'center',
+                          marginTop: '0.55rem',
+                          paddingTop: '0.45rem',
+                          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                        }}
+                      >
+                        ⚡ {isHindi ? 'फोन पर "अभी कॉल लगाएं" दबाते ही डायलर खुल जाएगा और कॉल कनेक्ट हो जाएगी' : 'Tapping "Call Now" opens your mobile dialer to connect instantly'}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Message Footer: Time + Listen Aloud Button */}
                   <div
