@@ -194,7 +194,10 @@ const SeasonalCropPredictor: React.FC<SeasonalCropPredictorProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden ${className}`}>
+    <div
+      id="seasonal-crop-predictor-root"
+      className={`bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden ${className}`}
+    >
       
       {/* Top Header Banner */}
       <div className="bg-gradient-to-r from-emerald-800 via-green-700 to-teal-800 p-5 sm:p-7 text-white relative overflow-hidden">

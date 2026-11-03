@@ -5,7 +5,7 @@ import {
   TestTube2, Stethoscope, Camera, Truck, ArrowRight,
   Sun, CloudRain, Wind, TrendingUp, Bell, Star,
   CheckCircle, Clock, AlertCircle, Sprout, BarChart3, Wheat,
-  Sparkles
+  Sparkles, ExternalLink
 } from 'lucide-react';
 import SoilCropTestModal from './modals/SoilCropTestModal';
 import SoilReportModal, { sampleSoilReports, SoilReportData } from './modals/SoilReportModal';
@@ -14,6 +14,7 @@ import CropScanningModal from './modals/CropScanningModal';
 import TransportModal from './modals/TransportModal';
 import CropPredictionModal from './modals/CropPredictionModal';
 import SeasonalCropPredictor from './SeasonalCropPredictor';
+import GovtSchemesTicker from './GovtSchemesTicker';
 
 const FarmerDashboard: React.FC = () => {
   const { user, language } = useAuth();
@@ -253,6 +254,9 @@ const FarmerDashboard: React.FC = () => {
           {/* Main Column */}
           <div className="space-y-6">
             
+            {/* Live Govt Schemes & Subsidies Upward Ticker Tile */}
+            <GovtSchemesTicker />
+
             {/* Services Section */}
             <div>
               <div className="flex items-center gap-2 mb-3 sm:mb-4">
@@ -599,19 +603,36 @@ const FarmerDashboard: React.FC = () => {
                 </h3>
               </div>
               {[
-                { name: 'PM-Kisan Samman', amount: '₹6,000/yr', color: '#16a34a' },
-                { name: 'Fasal Bima Yojana', amount: 'Coverage', color: '#3b82f6' },
+                { name: isHindi ? 'पीएम-किसान सम्मान' : isPunjabi ? 'ਪੀਐੱਮ-ਕਿਸਾਨ' : 'PM-Kisan Samman', amount: '₹6,000/yr', color: '#16a34a', url: 'https://pmkisan.gov.in/' },
+                { name: isHindi ? 'पीएम फसल बीमा' : isPunjabi ? 'ਫ਼ਸਲ ਬੀਮਾ' : 'Fasal Bima Yojana', amount: 'Coverage', color: '#3b82f6', url: 'https://pmfby.gov.in/' },
+                { name: isHindi ? 'पीएम-कुसुम सोलर पंप' : isPunjabi ? 'ਸੋਲਰ ਪੰਪ' : 'PM-Kusum Solar', amount: '90% Subsidy', color: '#d97706', url: 'https://pmkusum.mnre.gov.in/' },
               ].map((s, i) => (
-                <div
+                <a
                   key={i}
-                  className="flex justify-between items-center p-2.5 rounded-xl mb-2 bg-slate-50 text-xs font-medium"
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex justify-between items-center p-2.5 rounded-xl mb-2 bg-slate-50 hover:bg-emerald-50 text-xs font-medium transition-colors border border-transparent hover:border-emerald-200 group cursor-pointer"
+                  title="Open official portal"
                 >
-                  <span className="text-gray-800">{s.name}</span>
+                  <span className="text-gray-800 group-hover:text-emerald-900 group-hover:underline flex items-center gap-1">
+                    <span>{s.name}</span>
+                    <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-emerald-600 inline" />
+                  </span>
                   <span className="font-bold" style={{ color: s.color }}>{s.amount}</span>
-                </div>
+                </a>
               ))}
-              <button className="w-full mt-1 py-2 bg-green-50 hover:bg-green-100 text-green-700 font-bold rounded-xl text-xs transition-colors cursor-pointer border border-green-200">
-                {isHindi ? 'सभी योजनाएं देखें →' : isPunjabi ? 'ਸਾਰੀਆਂ ਸਕੀਮਾਂ ਵੇਖੋ →' : 'View All Schemes →'}
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('seasonal-crop-predictor-root');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="w-full mt-1 py-2 bg-green-50 hover:bg-green-100 text-green-700 font-bold rounded-xl text-xs transition-colors cursor-pointer border border-green-200 flex items-center justify-center gap-1"
+              >
+                <span>{isHindi ? 'लाइव योजनाएं व सब्सिडी देखें →' : isPunjabi ? 'ਸਾਰੀਆਂ ਸਕੀਮਾਂ ਵੇਖੋ →' : 'View Live Schemes & Subsidies →'}</span>
               </button>
             </div>
 

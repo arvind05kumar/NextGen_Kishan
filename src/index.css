@@ -140,3 +140,51 @@
   animation: pageRevealIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* =========================================================================
+   Live Govt Schemes Upward Ticker Animations
+   ========================================================================= */
+
+@keyframes tickerSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tickerSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tickerProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-ticker-slide-up {
+  animation: tickerSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-ticker-slide-down {
+  animation: tickerSlideDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-ticker-progress {
+  animation: tickerProgress 4.2s linear forwards;
+}
+
+
